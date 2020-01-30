@@ -1,0 +1,8 @@
+#accordion h1 {
+  font-size: 14px;
+}
+
+#accordion h1,
+#accordion p {
+  margin: 0;
+}
