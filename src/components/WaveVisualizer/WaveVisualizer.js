@@ -79,7 +79,7 @@ export default class WaveVisualizer extends React.Component {
           <div id="waveform-timeline" />
         </div>
         <div className="flex-item">
-          <p align="center">
+          <div align="center">
             <Button
               id="play-button"
               icon="fas fa-play"
@@ -92,7 +92,7 @@ export default class WaveVisualizer extends React.Component {
                 border: "none"
               }}
             />
-          </p>
+          </div>
         </div>
       </div>
     );

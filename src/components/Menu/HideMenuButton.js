@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TextBox } from "devextreme-react";
+import { Button } from "devextreme-react";
 
 export default class HideMenuButton extends React.Component {
   render() {
@@ -9,8 +9,8 @@ export default class HideMenuButton extends React.Component {
         type="normal"
         onClick={this.props.handler}
         style={{
-          "margin-top": "-9px",
-          "margin-left": "260px",
+          marginTop: "-9px",
+          marginLeft: "260px",
           position: "absolute",
           overflow: "hidden",
           color: "white",

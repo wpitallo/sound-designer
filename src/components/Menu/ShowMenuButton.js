@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TextBox } from "devextreme-react";
+import { Button } from "devextreme-react";
 
 export default class ShowMenuButton extends React.Component {
   render() {
@@ -9,8 +9,8 @@ export default class ShowMenuButton extends React.Component {
         type="normal"
         onClick={this.doneClick}
         style={{
-          "margin-top": "-9px",
-          "margin-left": "5px",
+          marginTop: "-9px",
+          marginLeft: "5px",
           position: "absolute",
           overflow: "hidden",
           color: "white",
