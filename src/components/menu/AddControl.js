@@ -16,7 +16,7 @@ export default class AddControl extends React.Component {
         }}
       >
         <TextBox
-          style={{ marginTop: "18px", width: "195px", float: "left" }}
+          style={{ marginTop: "18px", width: "145px", float: "left" }}
           placeholder={this.props.menuEntity}
           showClearButton={true}
         />
@@ -25,7 +25,11 @@ export default class AddControl extends React.Component {
           type="normal"
           text="Add"
           onClick={this.doneClick}
-          style={{ marginTop: "18px", overflow: "hidden", color: "white" }}
+          style={{
+            marginTop: "18px",
+            overflow: "hidden",
+            color: "white"
+          }}
         />
       </div>
     );

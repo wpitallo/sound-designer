@@ -65,9 +65,12 @@ hr.dotted {
 }
 
 .flex-item {
-  height: 150px;
   width: 100%;
   border: 0.2px solid #595959;
+}
+
+.no-border {
+  border: none;
 }
 
 #play-button.dx-button-has-text .dx-icon {

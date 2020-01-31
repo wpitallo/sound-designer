@@ -6,7 +6,7 @@ export default class MenuItem extends React.Component {
     return (
       <div style={{ marginTop: "10px" }}>
         <Button icon="trash" onClick={this.plusClick} />
-        <Button style={{ height: "36px", width: "235px" }}>
+        <Button style={{ height: "36px", width: "195px" }}>
           {this.props.item.name}
         </Button>
       </div>

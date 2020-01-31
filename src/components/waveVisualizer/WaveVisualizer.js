@@ -78,15 +78,23 @@ export default class WaveVisualizer extends React.Component {
           <div id="waveform" />
           <div id="waveform-timeline" />
         </div>
-        <div className="flex-item">
+        <div className="flex-item" style={{ height: "70px" }}>
           <div align="center">
+            <label style={{ position: "absolute", marginTop: "-30px" }}>
+              EffectName
+            </label>
             <Button
               id="play-button"
               icon="fas fa-play"
               type="normal"
               onClick={this.playPause}
+              stylingMode="text"
               style={{
-                marginTop: "-60px",
+                marginLeft: "15px",
+                marginTop: "10px",
+                borderRadius: "50px",
+                width: "50px",
+                height: "50px",
                 fontSize: "50px",
                 color: "white",
                 border: "none"

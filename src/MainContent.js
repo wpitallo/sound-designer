@@ -1,9 +1,11 @@
 import React from "react";
 
-import HowlController from "./components/HowlController/HowlController.js";
-import WaveVisualizer from "./components/WaveVisualizer/WaveVisualizer.js";
-import LanguageSelector from "./components/LanguageSelector/LanguageSelector.js";
-import ThreeVisualizer from "./components/ThreeVisualizer/ThreeVisualizer.js";
+import HowlController from "./components/howlController/HowlController.js";
+import WaveVisualizer from "./components/waveVisualizer/WaveVisualizer.js";
+import LanguageSelector from "./components/languageSelector/LanguageSelector.js";
+import ThreeVisualizer from "./components/threeVisualizer/ThreeVisualizer.js";
+
+import AudioAdjustmentRow from "./components/audioAdjustments/AudioAdjustmentRow.js";
 
 export default class MainContent extends React.Component {
   constructor(props) {
@@ -29,7 +31,7 @@ export default class MainContent extends React.Component {
         <div
           className="flex-item"
           style={{
-            height: "230px",
+            height: "180px",
             marginTop: "-100px",
             borderBottom: "none"
           }}
@@ -44,9 +46,21 @@ export default class MainContent extends React.Component {
           className="flex-item"
           style={{
             borderTop: "none"
+            // backgroundColor: "blue"
           }}
         >
           <WaveVisualizer howlController={this.howlController} />
+        </div>
+        <div
+          className="flex-item no-border"
+          style={{
+            borderTop: "none"
+            // backgroundColor: "red"
+          }}
+        >
+          <div className="flex-container-row">
+            <AudioAdjustmentRow />
+          </div>
         </div>
       </div>
     );

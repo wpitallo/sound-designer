@@ -10,7 +10,7 @@ export default class HideMenuButton extends React.Component {
         onClick={this.props.handler}
         style={{
           marginTop: "-9px",
-          marginLeft: "260px",
+          marginLeft: "210px",
           position: "absolute",
           overflow: "hidden",
           color: "white",

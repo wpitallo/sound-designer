@@ -1,6 +1,6 @@
 import React from "react";
 
-import Menu from "./components/Menu/Menu.js";
+import Menu from "./components/menu/Menu.js";
 import MainContent from "./MainContent.js";
 
 import "./app.css";
@@ -30,7 +30,8 @@ class App extends React.Component {
               <Menu dataEndpoint="./data/projects.js" menuEntity="Project" />
               <Menu dataEndpoint="./data/sprites.js" menuEntity="Sprites" />
               <Menu dataEndpoint="./data/sounds.js" menuEntity="Sounds" />
-              <Menu dataEndpoint="./data/effects.js" menuEntity="Effects" />
+              <Menu dataEndpoint="./data/presets.js" menuEntity="Presets" />
+              <Menu dataEndpoint="./data/effects.js" menuEntity="effects" />
               <MainContent />
             </div>
           </div>

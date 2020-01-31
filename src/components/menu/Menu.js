@@ -12,7 +12,7 @@ export default class Menu extends React.Component {
     super(props);
     this.state = {
       data: [],
-      width: "300px",
+      width: "250px",
       opacity: 1
     };
     this.selectionChanged = this.selectionChanged.bind(this);
@@ -31,7 +31,7 @@ export default class Menu extends React.Component {
 
   showMenuButton() {
     this.setState({
-      width: "300px"
+      width: "200px"
     });
     setTimeout(() => {
       this.setState({
@@ -91,7 +91,7 @@ export default class Menu extends React.Component {
         <div
           style={{
             height: "100vh",
-            width: "300px",
+            width: "250px",
             border: "0.2px solid #595959",
             paddingLeft: "10px",
             paddingRight: "1px"
