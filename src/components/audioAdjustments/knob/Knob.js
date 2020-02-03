@@ -121,14 +121,20 @@ export default class Knob extends React.Component {
           className="flex-item no-border"
           style={{
             fontSize: "25px",
-            paddingLeft: "30px",
+            paddingLeft: "20px",
             paddingRight: "20px",
-            paddingBottom: "10px"
+            paddingBottom: "10px",
+            marginTop: "-35px"
           }}
         >
           {this.props.value}
         </div>
-        <div className="flex-item no-border">
+        <div
+          className="flex-item no-border"
+          style={{
+            paddingTop: "50px"
+          }}
+        >
           <div className="knob" style={kStyle}>
             <div className="ticks">
               {this.props.numTicks

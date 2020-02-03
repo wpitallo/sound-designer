@@ -2,6 +2,8 @@ import React from "react";
 import { DropDownButton } from "devextreme-react";
 
 import Knob from "./knob/Knob.js";
+
+import VerticalSlider from "./verticalSlider/VerticalSlider.js";
 import EaseGraph from "./easeGraph/EaseGraph.js";
 
 import SeekTime from "./SeekTime.js";
@@ -40,15 +42,23 @@ export default class AudioAdjustmentRow extends React.Component {
     this.knobFlexItemStyle = {
       paddingLeft: "20px",
       paddingRight: "20px",
-      marginTop: "5px",
+      marginTop: "50px",
       paddingBottom: "20px",
+      textAlign: "-webkit-center"
+    };
+
+    this.verticalSliderFlexItemStyle = {
+      paddingLeft: "20px",
+      paddingRight: "20px",
+      marginBottom: "-45px",
       textAlign: "-webkit-center"
     };
 
     this.EaseGraphFlexItemStyle = {
       paddingLeft: "20px",
       paddingRight: "20px",
-      textAlign: "-webkit-center"
+      textAlign: "-webkit-center",
+      marginTop: "-100px"
     };
 
     this.easeGraph = React.createRef();
@@ -110,57 +120,115 @@ export default class AudioAdjustmentRow extends React.Component {
     }
 
     let valueControllers;
-    if (this.props.easeType.name === "None") {
-      valueControllers = (
-        <div className="flex-container-row">
-          <div className="flex-container-row">
-            <div className="flex-item no-border" style={this.knobFlexItemStyle}>
-              <Knob
-                size={50}
-                numTicks={100}
-                degrees={260}
-                min={1}
-                max={100}
-                value={this.state.stateValue1}
-                color={true}
-                onChange={this.handleValue1Change}
-              />
-            </div>
-          </div>
-        </div>
-      );
-    } else {
-      valueControllers = (
-        <div className="flex-container-row">
-          <div className="flex-container-row">
-            <div className="flex-item no-border" style={this.knobFlexItemStyle}>
-              <Knob
-                size={50}
-                numTicks={100}
-                degrees={260}
-                min={1}
-                max={100}
-                value={this.state.stateValue1}
-                color={true}
-                onChange={this.handleValue1Change}
-              />
-            </div>
 
-            <div className="flex-item no-border" style={this.knobFlexItemStyle}>
-              <Knob
-                size={50}
-                numTicks={100}
-                degrees={260}
-                min={1}
-                max={100}
-                value={this.state.stateValue2}
-                color={true}
-                onChange={this.handleValue2Change}
-              />
+    if (this.props.selectedEffect.name === "Volume") {
+      if (this.props.easeType.name === "None") {
+        valueControllers = (
+          <div className="flex-container-row">
+            <div className="flex-container-row">
+              <div
+                className="flex-item no-border"
+                style={this.knobFlexItemStyle}
+              >
+                <Knob
+                  size={50}
+                  numTicks={100}
+                  degrees={260}
+                  min={1}
+                  max={100}
+                  value={this.state.stateValue1}
+                  color={true}
+                  onChange={this.handleValue1Change}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      );
+        );
+      } else {
+        valueControllers = (
+          <div className="flex-container-row">
+            <div className="flex-container-row">
+              <div
+                className="flex-item no-border"
+                style={this.knobFlexItemStyle}
+              >
+                <Knob
+                  size={50}
+                  numTicks={100}
+                  degrees={260}
+                  min={1}
+                  max={100}
+                  value={this.state.stateValue1}
+                  color={true}
+                  onChange={this.handleValue1Change}
+                />
+              </div>
+
+              <div
+                className="flex-item no-border"
+                style={this.knobFlexItemStyle}
+              >
+                <Knob
+                  size={50}
+                  numTicks={100}
+                  degrees={260}
+                  min={1}
+                  max={100}
+                  value={this.state.stateValue2}
+                  color={true}
+                  onChange={this.handleValue2Change}
+                />
+              </div>
+            </div>
+          </div>
+        );
+      }
+    }
+
+    if (this.props.selectedEffect.name === "Rate") {
+      if (this.props.easeType.name === "None") {
+        valueControllers = (
+          <div className="flex-container-row">
+            <div className="flex-container-row">
+              <div
+                className="flex-item no-border"
+                style={this.verticalSliderFlexItemStyle}
+              >
+                <VerticalSlider
+                  value={this.state.stateValue1}
+                  onChange={this.handleValue1Change}
+                />
+              </div>
+            </div>
+          </div>
+        );
+      } else {
+        valueControllers = (
+          <div className="flex-container-row">
+            <div className="flex-container-row">
+              <div
+                className="flex-item no-border"
+                style={this.verticalSliderFlexItemStyle}
+              >
+                <VerticalSlider
+                  value={this.state.stateValue1}
+                  onChange={this.handleValue1Change}
+                />
+              </div>
+
+              <div
+                className="flex-item no-border"
+                style={this.verticalSliderFlexItemStyle}
+              >
+                <VerticalSlider
+                  value={this.state.stateValue1}
+                  onChange={this.handleValue1Change}
+                />
+              </div>
+            </div>
+          </div>
+        );
+      }
     }
 
     return (

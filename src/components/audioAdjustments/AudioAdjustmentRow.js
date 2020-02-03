@@ -8,8 +8,8 @@ export default class AudioAdjustmentRow extends React.Component {
     super(props);
 
     this.howlerEffects = [
-      { id: 1, name: "volume", icon: "fas fa-volume-up" },
-      { id: 4, name: "Right", icon: "alignright" },
+      { id: 1, name: "Volume", icon: "fas fa-volume-up" },
+      { id: 4, name: "Rate", icon: "fas fa-tachometer-alt" },
       { id: 2, name: "Center", icon: "aligncenter" },
       { id: 3, name: "Justify", icon: "alignjustify" }
     ];
@@ -25,8 +25,8 @@ export default class AudioAdjustmentRow extends React.Component {
     this.onEaseTypeChanged = this.onEaseTypeChanged.bind(this);
 
     this.state = {
-      selectedEffect: this.howlerEffects[0],
-      easeType: this.easeTypes[0]
+      selectedEffect: this.howlerEffects[1],
+      easeType: this.easeTypes[1]
     };
   }
 
@@ -153,7 +153,10 @@ export default class AudioAdjustmentRow extends React.Component {
               paddingBottom: "20px"
             }}
           >
-            <DefaultAdjustment easeType={this.state.easeType} />
+            <DefaultAdjustment
+              selectedEffect={this.state.selectedEffect}
+              easeType={this.state.easeType}
+            />
           </div>
         </div>
       </div>

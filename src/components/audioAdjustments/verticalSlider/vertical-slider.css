@@ -1,12 +1,22 @@
+.rangeslider {
+  position: relative;
+  height: 165px;
+  padding-top: 10px;
+}
+
 .rangeslider-vertical .rangeslider__fill {
-  width: 100%;
+  width: 1px;
+  height: 150px !important;
   background-color: #fff !important;
   box-shadow: none;
   bottom: 0;
 }
 
 .rangeslider .rangeslider__handle {
-  background: #fff;
+  margin-left: -20px;
+  width: 40px;
+  height: 15px;
+  background: #fc039d;
   border: 1px solid #ccc;
   cursor: pointer;
   display: inline-block;

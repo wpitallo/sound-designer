@@ -1,32 +1,47 @@
-import React, { Component } from "react";
+import React from "react";
 import Slider from "react-rangeslider";
 
 import "./vertical-slider.css";
 
-export default class VerticalSlider extends Component {
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      volume: 20
-    };
+export default class VerticalSlider extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.handleOnChange = this.handleOnChange.bind(this);
   }
 
-  handleOnChange = value => {
-    this.setState({
-      volume: value
-    });
-  };
+  handleOnChange(value) {
+    this.props.onChange(value);
+    // this.setState({
+    //   value: value
+    // });
+  }
 
   render() {
-    let { volume } = this.state;
     return (
-      <div className="slider-vertical">
-        <Slider
-          value={volume}
-          orientation="vertical"
-          onChange={this.handleOnChange}
-          tooltip={false}
-        />
+      <div className="flex-container-column">
+        <div
+          className="flex-item no-border"
+          style={{
+            fontSize: "25px",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            paddingBottom: "10px",
+            paddingTop: "15px"
+          }}
+        >
+          {this.props.value}
+        </div>
+        <div className="flex-item no-border">
+          <div className="slider-vertical">
+            <Slider
+              value={this.props.value}
+              orientation="vertical"
+              onChange={this.handleOnChange}
+              tooltip={false}
+            />
+          </div>
+        </div>
       </div>
     );
   }
