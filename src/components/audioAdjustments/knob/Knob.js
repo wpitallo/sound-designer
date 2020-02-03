@@ -116,23 +116,42 @@ export default class Knob extends React.Component {
     iStyle.transform = "rotate(" + this.state.deg + "deg)";
 
     return (
-      <div className="knob" style={kStyle}>
-        <div className="ticks">
-          {this.props.numTicks
-            ? this.renderTicks().map((tick, i) => (
-                <div
-                  key={i}
-                  className={
-                    "tick" + (tick.deg <= this.currentDeg ? " active" : "")
-                  }
-                  style={tick.tickStyle}
-                />
-              ))
-            : null}
+      <div className="flex-container-column">
+        <div
+          className="flex-item no-border"
+          style={{
+            fontSize: "25px",
+            paddingLeft: "30px",
+            paddingRight: "20px",
+            paddingBottom: "10px"
+          }}
+        >
+          {this.props.value}
         </div>
-        <div className="knob outer" style={oStyle} onMouseDown={this.startDrag}>
-          <div className="knob inner" style={iStyle}>
-            <div className="grip" />
+        <div className="flex-item no-border">
+          <div className="knob" style={kStyle}>
+            <div className="ticks">
+              {this.props.numTicks
+                ? this.renderTicks().map((tick, i) => (
+                    <div
+                      key={i}
+                      className={
+                        "tick" + (tick.deg <= this.currentDeg ? " active" : "")
+                      }
+                      style={tick.tickStyle}
+                    />
+                  ))
+                : null}
+            </div>
+            <div
+              className="knob outer"
+              style={oStyle}
+              onMouseDown={this.startDrag}
+            >
+              <div className="knob inner" style={iStyle}>
+                <div className="grip" />
+              </div>
+            </div>
           </div>
         </div>
       </div>

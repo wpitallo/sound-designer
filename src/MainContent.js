@@ -10,7 +10,9 @@ import AudioAdjustmentRow from "./components/audioAdjustments/AudioAdjustmentRow
 export default class MainContent extends React.Component {
   constructor(props) {
     super(props);
-    this.howlController = new HowlController();
+    if (!this.howlController) {
+      this.howlController = new HowlController();
+    }
     this.howlChanged = this.howlChanged.bind(this);
   }
 
