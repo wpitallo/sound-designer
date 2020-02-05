@@ -145,14 +145,7 @@ export default class AudioAdjustmentRow extends React.Component {
         </div>
 
         <div className="flex-container-row">
-          <div
-            className="flex-item no-border"
-            style={{
-              paddingLeft: "20px",
-              paddingRight: "20px",
-              paddingBottom: "20px"
-            }}
-          >
+          <div className="flex-item no-border">
             <DefaultAdjustment
               selectedEffect={this.state.selectedEffect}
               easeType={this.state.easeType}

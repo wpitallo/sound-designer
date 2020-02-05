@@ -27,11 +27,11 @@ class App extends React.Component {
             </div>
 
             <div className="flex-container-row">
-              <Menu dataEndpoint="./data/projects.js" menuEntity="Project" />
-              <Menu dataEndpoint="./data/sprites.js" menuEntity="Sprites" />
-              <Menu dataEndpoint="./data/sounds.js" menuEntity="Sounds" />
-              <Menu dataEndpoint="./data/presets.js" menuEntity="Presets" />
-              <Menu dataEndpoint="./data/effects.js" menuEntity="effects" />
+              <Menu dataEndpoint="projects" menuEntity="Project" />
+              <Menu dataEndpoint="sprites" menuEntity="Sprites" />
+              <Menu dataEndpoint="sounds" menuEntity="Sounds" />
+              <Menu dataEndpoint="presets" menuEntity="Presets" />
+              <Menu dataEndpoint="effects" menuEntity="effects" />
               <MainContent />
             </div>
           </div>

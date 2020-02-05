@@ -24,7 +24,23 @@ export default class Menu extends React.Component {
     this.hideMenuButton = this.hideMenuButton.bind(this);
   }
   async componentDidMount() {
-    const dataHelper = await import(this.props.dataEndpoint);
+    let dataHelper = {};
+    if (this.props.dataEndpoint === "projects") {
+      dataHelper = await import("./data/projects.js");
+    }
+    if (this.props.dataEndpoint === "sprites") {
+      dataHelper = await import("./data/sprites.js");
+    }
+    if (this.props.dataEndpoint === "sounds") {
+      dataHelper = await import("./data/sounds.js");
+    }
+    if (this.props.dataEndpoint === "presets") {
+      dataHelper = await import("./data/presets.js");
+    }
+    if (this.props.dataEndpoint === "effects") {
+      dataHelper = await import("./data/effects.js");
+    }
+
     const data = dataHelper.default.getData();
     this.setState({ data: data });
   }

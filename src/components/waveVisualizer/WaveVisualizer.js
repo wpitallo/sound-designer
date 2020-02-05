@@ -1,6 +1,8 @@
 import React from "react";
 
-import WaveSurfer from "./scripts/wavesurfer.js";
+import WaveSurfer from "./wavesurfer/wavesurfer.js";
+import RegionsPlugin from "./wavesurfer/plugin/regions.js";
+
 import { Button } from "devextreme-react";
 
 import "./wavesurfer.css";
@@ -24,21 +26,53 @@ export default class WaveVisualizer extends React.Component {
 
   createWaveform() {
     if (this.wavesurfer) {
-      this.wavesurfer.destroy();
+      debugger;
+      this.wavesurfer._onResize = undefined;
+      //this.wavesurfer.clearRegions();
+      try {
+        this.wavesurfer.initialisedPluginList = {};
+        this.wavesurfer.Regions = {};
+        this.wavesurfer.regions = {};
+        this.wavesurfer.destroy();
+        debugger;
+        this.wavesurfer = undefined;
+      } catch (err) {}
     }
+
+    WaveSurfer.regions = RegionsPlugin;
+
+    let regions = {
+      regions: [
+        {
+          id: "newRegion",
+          start: 1,
+          end: 3,
+          loop: false,
+          color: "hsla(120, 100%, 30%, 0.25)"
+        }
+      ]
+    };
 
     this.wavesurfer = WaveSurfer.create({
       container: "#waveform",
       waveColor: "#28fc03",
       audioContext: this.props.howlController.howler.ctx.destination.context,
+      // backend: "MediaElement",
       splitChannels: true,
       responsive: true,
       barWidth: 2,
       barHeight: 1, // the height of the wave
-      barGap: null
+      barGap: null,
+      plugins: [RegionsPlugin.create(regions)]
     });
 
-    this.wavesurfer.load("/sounds/summarySounds.mp3#t=20,30");
+    this.wavesurfer.regions.disableDragSelection();
+
+    //this.wavesurfer.load("/sounds/summarySounds.mp3");
+    this.wavesurfer.load("/sounds/as_Base_Background.mp3");
+    //this.wavesurfer.regions = RegionsPlugin;
+
+    //this.wavesurfer.backend.params.audioContext = this.props.howlController.howler.ctx.destination.context;
 
     this.wavesurfer.setVolume(0);
     this.wavesurfer.setMute(true);
@@ -77,7 +111,20 @@ export default class WaveVisualizer extends React.Component {
       console.log("Reset to beginning (ready)");
       this.props.howlController.sound.seek(0);
       this.props.howlController.sound.stop();
+
+      // this.wavesurfer.regions.create({
+      //   start: 1,
+      //   end: 4,
+      //   color: "hsla(400, 100%, 30%, 0.5)"
+      // });
     });
+
+    debugger;
+    this.wavesurfer.regions.list.newRegion.reSizeCallback = region => {
+      console.log(region.start);
+      console.log(region.end);
+      console.log(region);
+    };
   }
 
   render() {
@@ -88,7 +135,7 @@ export default class WaveVisualizer extends React.Component {
           style={{ paddingLeft: "2px", borderTop: "none" }}
         >
           <div id="waveform" style={{ width: "100%" }} />
-          <div id="waveform-timeline" />
+          <div id="waveform-regions" />
         </div>
         <div className="flex-item" style={{ height: "70px" }}>
           <div align="center">

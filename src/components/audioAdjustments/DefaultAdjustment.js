@@ -232,7 +232,7 @@ export default class AudioAdjustmentRow extends React.Component {
     }
 
     return (
-      <div className="flex-item no-border" style={{ paddingRight: "20px" }}>
+      <div className="flex-item no-border">
         {seekType}
         {valueControllers}
         {easeType}
