@@ -33,17 +33,16 @@ class App extends React.Component {
     if (menuEntity === "projects") {
       dataHelper = await import("./data/sprites.js");
 
+      this.setState({ selectedEffect: undefined });
+      this.setState({ selectedPreset: undefined });
+      this.setState({ selectedSound: undefined });
+      this.setState({ selectedSprite: undefined });
       this.setState({ selectedProject: menuItem });
 
-      this.setState({ selectedSprite: undefined });
-      this.setState({ selectedSound: undefined });
-      this.setState({ selectedPreset: undefined });
-      this.setState({ selectedEffect: undefined });
-
-      this.setState({ spritesData: dataHelper.default.getData() });
-      this.setState({ soundsData: undefined });
-      this.setState({ presetsData: undefined });
       this.setState({ effectsData: undefined });
+      this.setState({ presetsData: undefined });
+      this.setState({ soundsData: undefined });
+      this.setState({ spritesData: dataHelper.default.getData() });
     }
     if (menuEntity === "sprites") {
       if (this.state.selectedProject.name === "Project 1") {
@@ -52,14 +51,14 @@ class App extends React.Component {
         dataHelper = await import("./data/sounds2.js");
       }
 
-      this.setState({ selectedSprite: menuItem });
-      this.setState({ selectedSound: undefined });
-      this.setState({ selectedPreset: undefined });
       this.setState({ selectedEffect: undefined });
+      this.setState({ selectedPreset: undefined });
+      this.setState({ selectedSound: undefined });
+      this.setState({ selectedSprite: menuItem });
 
-      this.setState({ soundsData: dataHelper.default.getData() });
-      this.setState({ presetsData: undefined });
       this.setState({ effectsData: undefined });
+      this.setState({ presetsData: undefined });
+      this.setState({ soundsData: dataHelper.default.getData() });
     }
     if (menuEntity === "sounds") {
       dataHelper = await import("./data/presets.js");
@@ -73,19 +72,19 @@ class App extends React.Component {
         data.sort((a, b) => a.id - b.id);
       }
 
-      this.setState({ selectedSound: menuItem });
-      this.setState({ selectedPreset: undefined });
       this.setState({ selectedEffect: undefined });
+      this.setState({ selectedPreset: undefined });
+      this.setState({ selectedSound: menuItem });
 
-      this.setState({ presetsData: data });
       this.setState({ effectsData: undefined });
+      this.setState({ presetsData: data });
     }
 
     if (menuEntity === "presets") {
       dataHelper = await import("./data/effects.js");
 
-      this.setState({ selectedPreset: menuItem });
       this.setState({ selectedEffect: undefined });
+      this.setState({ selectedPreset: menuItem });
 
       this.setState({ effectsData: dataHelper.default.getData() });
     }
@@ -156,43 +155,38 @@ class App extends React.Component {
     }
     let mainContent;
     if (this.state.selectedEffect) {
-      debugger;
       mainContent = <EffectEditor soundSrc={this.state.selectedSound.src} />;
     }
 
     return (
-      <div>
-        <div>
+      <div
+        style={{
+          height: "120px"
+        }}
+      >
+        <div className="heading">
+          <div alt="" className="adapter-logo" />
+        </div>
+        <div className="heading">
+          <div className="info text-center">
+            <h3>
+              <span id="gameName" />
+            </h3>
+          </div>
+        </div>
+
+        <div className="flex-container-row">
+          {projectsMenu}
+          {spritesMenu}
+          {soundsMenu}
+          {presetsMenu}
+          {effectsMenu}
           <div
             style={{
-              height: "120px"
+              width: "100%"
             }}
           >
-            <div className="heading">
-              <div alt="" className="adapter-logo" />
-            </div>
-            <div className="heading">
-              <div className="info text-center">
-                <h3>
-                  <span id="gameName" />
-                </h3>
-              </div>
-            </div>
-
-            <div className="flex-container-row">
-              {projectsMenu}
-              {spritesMenu}
-              {soundsMenu}
-              {presetsMenu}
-              {effectsMenu}
-              <div
-                style={{
-                  width: "100%"
-                }}
-              >
-                {mainContent}
-              </div>
-            </div>
+            {mainContent}
           </div>
         </div>
       </div>

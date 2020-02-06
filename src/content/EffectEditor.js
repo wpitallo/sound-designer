@@ -23,8 +23,8 @@ export default class EffectEditor extends React.Component {
     }
   }
 
-  componentDidUnmount() {
-    this.props.howlController.unload();
+  componentWillUnmount() {
+    this.howlController.unload();
   }
 
   howlChanged() {

@@ -25,8 +25,7 @@ export default class WaveVisualizer extends React.Component {
     window.addEventListener("resize", this.createWaveform.bind(this));
   }
 
-  componentDidUnmount() {
-    debugger;
+  componentWillUnmount() {
     this.destroy();
   }
 
@@ -77,7 +76,7 @@ export default class WaveVisualizer extends React.Component {
     this.wavesurfer.regions.disableDragSelection();
 
     //this.wavesurfer.load("/sounds/summarySounds.mp3");
-    debugger;
+
     this.wavesurfer.load(this.props.src);
     //this.wavesurfer.regions = RegionsPlugin;
 
@@ -128,7 +127,6 @@ export default class WaveVisualizer extends React.Component {
       // });
     });
 
-    debugger;
     this.wavesurfer.regions.list.newRegion.reSizeCallback = region => {
       console.log(region.start);
       console.log(region.end);
