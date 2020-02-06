@@ -23,6 +23,12 @@ class App extends React.Component {
       opacity: 1
     };
     this.menuItemClicked = this.menuItemClicked.bind(this);
+
+    this.showEffectsMenu = this.showEffectsMenu.bind(this);
+    this.showPresetsMenu = this.showPresetsMenu.bind(this);
+    this.showSoundsMenu = this.showSoundsMenu.bind(this);
+    this.showSpritesMenu = this.showSpritesMenu.bind(this);
+    this.showProjectsMenu = this.showProjectsMenu.bind(this);
   }
 
   async menuItemClicked(menuEntity, menuItem) {
@@ -98,14 +104,43 @@ class App extends React.Component {
     let data = dataHelper.default.getData();
     this.setState({ projectsData: data });
   }
+
+  showEffectsMenu() {
+    if (this.effectsMenu) {
+      this.effectsMenu.showMenu();
+    }
+  }
+  showPresetsMenu() {
+    if (this.presetsMenu) {
+      this.presetsMenu.showMenu();
+    }
+  }
+  showSoundsMenu() {
+    if (this.soundsMenu) {
+      this.soundsMenu.showMenu();
+    }
+  }
+  showSpritesMenu() {
+    if (this.spritesMenu) {
+      this.spritesMenu.showMenu();
+    }
+  }
+  showProjectsMenu() {
+    if (this.showProjectsMenu) {
+      this.showProjectsMenu.showMenu();
+    }
+  }
+
   render() {
     let projectsMenu;
     if (this.state.projectsData) {
       projectsMenu = (
         <Menu
           menuEntity="projects"
+          onRef={ref => (this.projectsMenu = ref)}
           data={this.state.projectsData}
           menuItemClicked={this.menuItemClicked}
+          showMenu={this.showSpritesMenu}
         />
       );
     }
@@ -115,8 +150,10 @@ class App extends React.Component {
       spritesMenu = (
         <Menu
           menuEntity="sprites"
+          onRef={ref => (this.spritesMenu = ref)}
           data={this.state.spritesData}
           menuItemClicked={this.menuItemClicked}
+          showMenu={this.showSoundsMenu}
         />
       );
     }
@@ -126,8 +163,10 @@ class App extends React.Component {
       soundsMenu = (
         <Menu
           menuEntity="sounds"
+          onRef={ref => (this.soundsMenu = ref)}
           data={this.state.soundsData}
           menuItemClicked={this.menuItemClicked}
+          showMenu={this.showPresetsMenu}
         />
       );
     }
@@ -137,8 +176,10 @@ class App extends React.Component {
       presetsMenu = (
         <Menu
           menuEntity="presets"
+          onRef={ref => (this.presetsMenu = ref)}
           data={this.state.presetsData}
           menuItemClicked={this.menuItemClicked}
+          showMenu={this.showEffectsMenu}
         />
       );
     }
@@ -148,6 +189,7 @@ class App extends React.Component {
       effectsMenu = (
         <Menu
           menuEntity="effects"
+          onRef={ref => (this.effectsMenu = ref)}
           data={this.state.effectsData}
           menuItemClicked={this.menuItemClicked}
         />

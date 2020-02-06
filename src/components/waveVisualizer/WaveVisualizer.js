@@ -13,6 +13,10 @@ export default class WaveVisualizer extends React.Component {
     this.playPause = this.playPause.bind(this);
     this.createWaveform = this.createWaveform.bind(this);
     this.destroy = this.destroy.bind(this);
+    this.state = {
+      icon: "fas fa-play",
+      ready: false
+    };
   }
 
   playPause() {
@@ -87,12 +91,14 @@ export default class WaveVisualizer extends React.Component {
 
     this.wavesurfer.on("play", () => {
       console.log("Play");
+      this.setState({ icon: "fas fa-pause" });
       this.props.howlController.sound.play();
     });
 
     this.wavesurfer.on("pause", () => {
       console.log("Pause");
       //player.pauseVideo();
+      this.setState({ icon: "fas fa-play" });
       this.props.howlController.sound.pause();
     });
 
@@ -105,18 +111,22 @@ export default class WaveVisualizer extends React.Component {
 
     this.wavesurfer.on("waveform-ready", () => {
       console.log("Reset to beginning (waveform-ready)");
+      this.setState({ ready: true });
       this.props.howlController.sound.seek(0);
       this.props.howlController.sound.stop();
     });
 
     this.wavesurfer.on("finish", () => {
       console.log("finish");
+      this.setState({ icon: "fas fa-play" });
       this.props.howlController.sound.seek(0);
       this.props.howlController.sound.stop();
     });
 
     this.wavesurfer.on("ready", () => {
       console.log("Reset to beginning (ready)");
+      this.setState({ ready: true });
+      this.setState({ icon: "fas fa-play" });
       this.props.howlController.sound.seek(0);
       this.props.howlController.sound.stop();
 
@@ -135,12 +145,32 @@ export default class WaveVisualizer extends React.Component {
   }
 
   render() {
+    let controls;
+    if (this.state.ready === true) {
+      controls = (
+        <Button
+          id="play-button"
+          icon={this.state.icon}
+          type="normal"
+          onClick={this.playPause}
+          stylingMode="text"
+          style={{
+            marginLeft: "15px",
+            marginTop: "10px",
+            borderRadius: "50px",
+            width: "50px",
+            height: "50px",
+            fontSize: "50px",
+            color: "white",
+            border: "none"
+          }}
+        />
+      );
+    }
+
     return (
       <div className="flex-container-column">
-        <div
-          className="flex-item"
-          style={{ paddingLeft: "2px", borderTop: "none" }}
-        >
+        <div className="flex-item no-border" style={{ paddingLeft: "2px" }}>
           <div id="waveform" style={{ width: "100%" }} />
           <div id="waveform-regions" />
         </div>
@@ -149,23 +179,7 @@ export default class WaveVisualizer extends React.Component {
             <label style={{ position: "absolute", marginTop: "-30px" }}>
               EffectName
             </label>
-            <Button
-              id="play-button"
-              icon="fas fa-play"
-              type="normal"
-              onClick={this.playPause}
-              stylingMode="text"
-              style={{
-                marginLeft: "15px",
-                marginTop: "10px",
-                borderRadius: "50px",
-                width: "50px",
-                height: "50px",
-                fontSize: "50px",
-                color: "white",
-                border: "none"
-              }}
-            />
+            {controls}
           </div>
         </div>
       </div>

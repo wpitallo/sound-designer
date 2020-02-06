@@ -16,6 +16,8 @@ export default class HowlController {
       this.sound.unload();
     }
     if (this.analyser) {
+      Howler.masterGain.disconnect(this.analyser);
+      this.analyser.disconnect(Howler.ctx.destination);
       this.analyser = undefined;
     }
   }

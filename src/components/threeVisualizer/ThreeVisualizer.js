@@ -208,7 +208,10 @@ export default class ThreeVisualizer extends React.Component {
   render() {
     return (
       <div id="content">
-        <div id="out" />
+        <div
+          id="out"
+          style={{ zIndex: 100, position: "absolute", pointerEvents: "none" }}
+        />
       </div>
     );
   }

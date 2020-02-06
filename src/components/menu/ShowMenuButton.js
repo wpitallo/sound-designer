@@ -7,7 +7,7 @@ export default class ShowMenuButton extends React.Component {
       <Button
         icon="menu"
         type="normal"
-        onClick={this.doneClick}
+        onClick={this.props.handler}
         style={{
           marginTop: "-9px",
           marginLeft: "5px",

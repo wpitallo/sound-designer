@@ -15,22 +15,36 @@ export default class Menu extends React.Component {
       opacity: 1
     };
     this.menuItemClicked = this.menuItemClicked.bind(this);
+
+    this.showMenu = this.showMenu.bind(this);
+    this.showMenuHandler = this.showMenuHandler.bind(this);
+    this.hideMenuHandler = this.hideMenuHandler.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.onRef(this);
+  }
+  componentWillUnmount() {
+    this.props.onRef(undefined);
   }
 
   menuItemClicked(e) {
     this.props.menuItemClicked(this.props.menuEntity, e);
   }
-  showMenuButton() {
+  showMenuHandler() {
+    this.props.showMenu();
+  }
+  showMenu() {
     this.setState({
-      width: "200px"
+      width: "250px"
     });
     setTimeout(() => {
       this.setState({
         opacity: 1
       });
-    }, 2000);
+    }, 200);
   }
-  hideMenuButton() {
+  hideMenuHandler() {
     this.setState({
       opacity: 0
     });
@@ -38,7 +52,7 @@ export default class Menu extends React.Component {
       this.setState({
         width: "0px"
       });
-    }, 2000);
+    }, 200);
   }
   render() {
     return (
@@ -47,7 +61,7 @@ export default class Menu extends React.Component {
         style={{
           height: "100%",
           width: `${this.state.width}`,
-          transition: "width 2s, opacity 2s linear",
+          transition: "width 200ms, opacity 200ms linear",
           opacity: `${this.state.opacity}`,
           paddingTop: "10px"
         }}
@@ -58,8 +72,8 @@ export default class Menu extends React.Component {
             height: "25px"
           }}
         >
-          <ShowMenuButton handler={this.showMenuButton} />
-          <HideMenuButton handler={this.hideMenuButton} />
+          <ShowMenuButton handler={this.showMenuHandler} />
+          <HideMenuButton handler={this.hideMenuHandler} />
         </div>
         <div
           style={{

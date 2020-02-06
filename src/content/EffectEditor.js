@@ -12,6 +12,7 @@ export default class EffectEditor extends React.Component {
     super(props);
     if (!this.howlController) {
       this.howlController = new HowlController(() => {});
+      this.howlController.unload();
       this.howlController.load(this.props.soundSrc);
     }
     this.howlChanged = this.howlChanged.bind(this);
@@ -25,6 +26,8 @@ export default class EffectEditor extends React.Component {
 
   componentWillUnmount() {
     this.howlController.unload();
+
+    this.howlController = undefined;
   }
 
   howlChanged() {
@@ -50,8 +53,8 @@ export default class EffectEditor extends React.Component {
           <div
             className="flex-item"
             style={{
-              borderTop: "none"
-              // backgroundColor: "blue"
+              borderTop: "none",
+              marginTop: "200px"
             }}
           >
             <WaveVisualizer
