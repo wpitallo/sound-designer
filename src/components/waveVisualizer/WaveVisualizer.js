@@ -12,6 +12,7 @@ export default class WaveVisualizer extends React.Component {
     super(props);
     this.playPause = this.playPause.bind(this);
     this.createWaveform = this.createWaveform.bind(this);
+    this.destroy = this.destroy.bind(this);
   }
 
   playPause() {
@@ -24,9 +25,13 @@ export default class WaveVisualizer extends React.Component {
     window.addEventListener("resize", this.createWaveform.bind(this));
   }
 
-  createWaveform() {
+  componentDidUnmount() {
+    debugger;
+    this.destroy();
+  }
+
+  destroy() {
     if (this.wavesurfer) {
-      debugger;
       this.wavesurfer._onResize = undefined;
       //this.wavesurfer.clearRegions();
       try {
@@ -34,12 +39,15 @@ export default class WaveVisualizer extends React.Component {
         this.wavesurfer.Regions = {};
         this.wavesurfer.regions = {};
         this.wavesurfer.destroy();
-        debugger;
         this.wavesurfer = undefined;
       } catch (err) {}
     }
+  }
 
+  createWaveform() {
     WaveSurfer.regions = RegionsPlugin;
+
+    this.destroy();
 
     let regions = {
       regions: [
@@ -69,7 +77,8 @@ export default class WaveVisualizer extends React.Component {
     this.wavesurfer.regions.disableDragSelection();
 
     //this.wavesurfer.load("/sounds/summarySounds.mp3");
-    this.wavesurfer.load("/sounds/as_Base_Background.mp3");
+    debugger;
+    this.wavesurfer.load(this.props.src);
     //this.wavesurfer.regions = RegionsPlugin;
 
     //this.wavesurfer.backend.params.audioContext = this.props.howlController.howler.ctx.destination.context;

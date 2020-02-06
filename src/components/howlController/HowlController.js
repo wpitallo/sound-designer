@@ -1,15 +1,35 @@
-import { Howl, Howler } from "../../scripts/howler.js";
+import { Howl, Howler } from "./scripts/howler.js";
 
 import "howler-plugin-effect-chain";
 
 import Tuna from "tunajs";
 
 export default class HowlController {
-  constructor() {
+  constructor(loaded) {
+    this.loaded = loaded;
+
     this.howler = Howler;
+  }
+
+  unload() {
+    if (this.sound) {
+      this.sound.unload();
+    }
+    if (this.analyser) {
+      this.analyser = undefined;
+    }
+  }
+
+  load(src) {
+    this.unload();
 
     this.sound = new Howl({
-      src: ["/sounds/summarySounds.mp3"]
+      src: [src]
+    });
+
+    this.sound.once("load", () => {
+      this.duration = this.formatTime(Math.round(this.sound.duration()));
+      this.loaded();
     });
 
     // Create analyzer
@@ -22,6 +42,13 @@ export default class HowlController {
 
     // Connect analyzer to destination
     this.analyser.connect(Howler.ctx.destination);
+  }
+
+  formatTime(secs) {
+    var minutes = Math.floor(secs / 60) || 0;
+    var seconds = secs - minutes * 60 || 0;
+
+    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
 
   addFilter() {

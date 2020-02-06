@@ -11,40 +11,15 @@ export default class Menu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       width: "250px",
       opacity: 1
     };
-    this.selectionChanged = this.selectionChanged.bind(this);
-    this.selectedItemsChanged = this.selectedItemsChanged.bind(this);
-    this.multipleChanged = this.multipleChanged.bind(this);
-    this.collapsibleChanged = this.collapsibleChanged.bind(this);
-    this.animationDurationChanged = this.animationDurationChanged.bind(this);
-    this.showMenuButton = this.showMenuButton.bind(this);
-    this.hideMenuButton = this.hideMenuButton.bind(this);
-  }
-  async componentDidMount() {
-    let dataHelper = {};
-    if (this.props.dataEndpoint === "projects") {
-      dataHelper = await import("./data/projects.js");
-    }
-    if (this.props.dataEndpoint === "sprites") {
-      dataHelper = await import("./data/sprites.js");
-    }
-    if (this.props.dataEndpoint === "sounds") {
-      dataHelper = await import("./data/sounds.js");
-    }
-    if (this.props.dataEndpoint === "presets") {
-      dataHelper = await import("./data/presets.js");
-    }
-    if (this.props.dataEndpoint === "effects") {
-      dataHelper = await import("./data/effects.js");
-    }
-
-    const data = dataHelper.default.getData();
-    this.setState({ data: data });
+    this.menuItemClicked = this.menuItemClicked.bind(this);
   }
 
+  menuItemClicked(e) {
+    this.props.menuItemClicked(this.props.menuEntity, e);
+  }
   showMenuButton() {
     this.setState({
       width: "200px"
@@ -113,61 +88,12 @@ export default class Menu extends React.Component {
             paddingRight: "1px"
           }}
         >
-          <MenuItems data={this.state.data} />
-          {/* <div id="accordion">
-            <Accordion
-              dataSource={this.companies}
-              collapsible={collapsible}
-              multiple={multiple}
-              animationDuration={animationDuration}
-              selectedItems={selectedItems}
-              onSelectionChanged={this.selectionChanged}
-              itemTitleRender={SoundGroupTitle}
-              itemRender={SoundTrackItem}
-            />
-          </div> */}
+          <MenuItems
+            data={this.props.data}
+            menuItemClicked={this.menuItemClicked}
+          />
         </div>
       </div>
     );
-  }
-
-  selectionChanged(e) {
-    let newItems = [...this.state.selectedItems];
-    e.removedItems.forEach(item => {
-      let index = newItems.indexOf(item);
-      if (index >= 0) {
-        newItems.splice(index, 1);
-      }
-    });
-    if (e.addedItems.length) {
-      newItems = [...newItems, ...e.addedItems];
-    }
-    this.setState({
-      selectedItems: newItems
-    });
-  }
-
-  selectedItemsChanged(e) {
-    this.setState({
-      selectedItems: e.value
-    });
-  }
-
-  multipleChanged(e) {
-    this.setState({
-      multiple: e.value
-    });
-  }
-
-  collapsibleChanged(e) {
-    this.setState({
-      collapsible: e.value
-    });
-  }
-
-  animationDurationChanged(e) {
-    this.setState({
-      animationDuration: e.value
-    });
   }
 }
