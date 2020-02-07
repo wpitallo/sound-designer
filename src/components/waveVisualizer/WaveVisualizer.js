@@ -177,7 +177,7 @@ export default class WaveVisualizer extends React.Component {
         <div className="flex-item" style={{ height: "70px" }}>
           <div align="center">
             <label style={{ position: "absolute", marginTop: "-30px" }}>
-              EffectName
+              {this.props.selectedEffect.name}
             </label>
             {controls}
           </div>

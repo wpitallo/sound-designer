@@ -13,13 +13,13 @@ export default class EffectEditor extends React.Component {
     if (!this.howlController) {
       this.howlController = new HowlController(() => {});
       this.howlController.unload();
-      this.howlController.load(this.props.soundSrc);
+      this.howlController.load(this.props.selectedSound.src);
     }
     this.howlChanged = this.howlChanged.bind(this);
   }
 
   componentDidMount() {
-    if (this.props.soundSrc) {
+    if (this.props.selectedSound.src) {
       this.howlChanged();
     }
   }
@@ -36,7 +36,7 @@ export default class EffectEditor extends React.Component {
 
   render() {
     let content;
-    if (this.props.soundSrc) {
+    if (this.props.selectedSound.src) {
       content = (
         <div>
           <div
@@ -58,8 +58,9 @@ export default class EffectEditor extends React.Component {
             }}
           >
             <WaveVisualizer
+              selectedEffect={this.props.selectedEffect}
               howlController={this.howlController}
-              src={this.props.soundSrc}
+              src={this.props.selectedSound.src}
             />
           </div>
           <div

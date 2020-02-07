@@ -23,21 +23,15 @@ class App extends React.Component {
       opacity: 1
     };
     this.menuItemClicked = this.menuItemClicked.bind(this);
-
-    this.showEffectsMenu = this.showEffectsMenu.bind(this);
-    this.showPresetsMenu = this.showPresetsMenu.bind(this);
-    this.showSoundsMenu = this.showSoundsMenu.bind(this);
-    this.showSpritesMenu = this.showSpritesMenu.bind(this);
-    this.showProjectsMenu = this.showProjectsMenu.bind(this);
   }
 
   async menuItemClicked(menuEntity, menuItem) {
-    //alert("menu entity: " + menuEntity + "menu name: " + menuItem.name);
-
     let dataHelper = {};
-
+    debugger;
     if (menuEntity === "projects") {
       dataHelper = await import("./data/sprites.js");
+
+      if (this.spritesMenu) this.spritesMenu.clearSelection();
 
       this.setState({ selectedEffect: undefined });
       this.setState({ selectedPreset: undefined });
@@ -51,6 +45,8 @@ class App extends React.Component {
       this.setState({ spritesData: dataHelper.default.getData() });
     }
     if (menuEntity === "sprites") {
+      if (this.soundsMenu) this.soundsMenu.clearSelection();
+
       if (this.state.selectedProject.name === "Project 1") {
         dataHelper = await import("./data/sounds1.js");
       } else {
@@ -67,6 +63,8 @@ class App extends React.Component {
       this.setState({ soundsData: dataHelper.default.getData() });
     }
     if (menuEntity === "sounds") {
+      if (this.presetsMenu) this.presetsMenu.clearSelection();
+
       dataHelper = await import("./data/presets.js");
       let data = dataHelper.default.getData();
       let foundDefault = data.find(x => x.name === "Default");
@@ -87,6 +85,8 @@ class App extends React.Component {
     }
 
     if (menuEntity === "presets") {
+      if (this.effectsMenu) this.effectsMenu.clearSelection();
+
       dataHelper = await import("./data/effects.js");
 
       this.setState({ selectedEffect: undefined });
@@ -99,36 +99,11 @@ class App extends React.Component {
       this.setState({ selectedEffect: menuItem });
     }
   }
+
   async componentDidMount() {
     let dataHelper = await import("./data/projects.js");
     let data = dataHelper.default.getData();
     this.setState({ projectsData: data });
-  }
-
-  showEffectsMenu() {
-    if (this.effectsMenu) {
-      this.effectsMenu.showMenu();
-    }
-  }
-  showPresetsMenu() {
-    if (this.presetsMenu) {
-      this.presetsMenu.showMenu();
-    }
-  }
-  showSoundsMenu() {
-    if (this.soundsMenu) {
-      this.soundsMenu.showMenu();
-    }
-  }
-  showSpritesMenu() {
-    if (this.spritesMenu) {
-      this.spritesMenu.showMenu();
-    }
-  }
-  showProjectsMenu() {
-    if (this.showProjectsMenu) {
-      this.showProjectsMenu.showMenu();
-    }
   }
 
   render() {
@@ -137,10 +112,10 @@ class App extends React.Component {
       projectsMenu = (
         <Menu
           menuEntity="projects"
+          noParent={true}
           onRef={ref => (this.projectsMenu = ref)}
           data={this.state.projectsData}
           menuItemClicked={this.menuItemClicked}
-          showMenu={this.showSpritesMenu}
         />
       );
     }
@@ -153,7 +128,7 @@ class App extends React.Component {
           onRef={ref => (this.spritesMenu = ref)}
           data={this.state.spritesData}
           menuItemClicked={this.menuItemClicked}
-          showMenu={this.showSoundsMenu}
+          showMenu={this.showProjectsMenu}
         />
       );
     }
@@ -166,7 +141,7 @@ class App extends React.Component {
           onRef={ref => (this.soundsMenu = ref)}
           data={this.state.soundsData}
           menuItemClicked={this.menuItemClicked}
-          showMenu={this.showPresetsMenu}
+          showMenu={this.showSpritesMenu}
         />
       );
     }
@@ -179,7 +154,7 @@ class App extends React.Component {
           onRef={ref => (this.presetsMenu = ref)}
           data={this.state.presetsData}
           menuItemClicked={this.menuItemClicked}
-          showMenu={this.showEffectsMenu}
+          showMenu={this.showSoundsMenu}
         />
       );
     }
@@ -192,12 +167,18 @@ class App extends React.Component {
           onRef={ref => (this.effectsMenu = ref)}
           data={this.state.effectsData}
           menuItemClicked={this.menuItemClicked}
+          showMenu={this.showPresetsMenu}
         />
       );
     }
     let mainContent;
     if (this.state.selectedEffect) {
-      mainContent = <EffectEditor soundSrc={this.state.selectedSound.src} />;
+      mainContent = (
+        <EffectEditor
+          selectedEffect={this.state.selectedEffect}
+          selectedSound={this.state.selectedSound}
+        />
+      );
     }
 
     return (
