@@ -54,7 +54,8 @@ export default class EffectEditor extends React.Component {
             className="flex-item"
             style={{
               borderTop: "none",
-              marginTop: "200px"
+              marginTop: "200px",
+              borderBottom: "none"
             }}
           >
             <WaveVisualizer

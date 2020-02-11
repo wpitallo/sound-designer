@@ -26,11 +26,7 @@ class App extends React.Component {
   }
 
   async menuItemClicked(menuEntity, menuItem) {
-    let dataHelper = {};
-    debugger;
     if (menuEntity === "projects") {
-      dataHelper = await import("./data/sprites.js");
-
       if (this.spritesMenu) this.spritesMenu.clearSelection();
 
       this.setState({ selectedEffect: undefined });
@@ -42,16 +38,20 @@ class App extends React.Component {
       this.setState({ effectsData: undefined });
       this.setState({ presetsData: undefined });
       this.setState({ soundsData: undefined });
-      this.setState({ spritesData: dataHelper.default.getData() });
+      this.setState({
+        spritesData: this.state.projectsData.find(
+          x => x.id === this.state.selectedProject.id
+        ).sprites
+      });
     }
     if (menuEntity === "sprites") {
       if (this.soundsMenu) this.soundsMenu.clearSelection();
 
-      if (this.state.selectedProject.name === "Project 1") {
-        dataHelper = await import("./data/sounds1.js");
-      } else {
-        dataHelper = await import("./data/sounds2.js");
-      }
+      // if (this.state.selectedProject.name === "Project 1") {
+      //   dataHelper = await import("./data/sounds1.js");
+      // } else {
+      //   dataHelper = await import("./data/sounds2.js");
+      // }
 
       this.setState({ selectedEffect: undefined });
       this.setState({ selectedPreset: undefined });
@@ -60,13 +60,22 @@ class App extends React.Component {
 
       this.setState({ effectsData: undefined });
       this.setState({ presetsData: undefined });
-      this.setState({ soundsData: dataHelper.default.getData() });
+      debugger;
+      this.setState({
+        soundsData: this.state.spritesData.find(
+          x => x.id === this.state.selectedSprite.id
+        ).sounds
+      });
     }
     if (menuEntity === "sounds") {
       if (this.presetsMenu) this.presetsMenu.clearSelection();
 
-      dataHelper = await import("./data/presets.js");
-      let data = dataHelper.default.getData();
+      this.setState({ selectedSound: menuItem });
+
+      let data = this.state.soundsData.find(
+        x => x.id === this.state.selectedSound.id
+      ).presets;
+
       let foundDefault = data.find(x => x.name === "Default");
       if (!foundDefault) {
         data.push({
@@ -87,12 +96,14 @@ class App extends React.Component {
     if (menuEntity === "presets") {
       if (this.effectsMenu) this.effectsMenu.clearSelection();
 
-      dataHelper = await import("./data/effects.js");
-
       this.setState({ selectedEffect: undefined });
       this.setState({ selectedPreset: menuItem });
-
-      this.setState({ effectsData: dataHelper.default.getData() });
+      debugger;
+      this.setState({
+        effectsData: this.state.presetsData.find(
+          x => x.id === this.state.selectedPreset.id
+        ).effects
+      });
     }
 
     if (menuEntity === "effects") {
