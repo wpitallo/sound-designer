@@ -77,7 +77,10 @@ export default class EffectEditor extends React.Component {
   }
 
   howlChanged() {
-    this.props.attachAnalyser(this.howlController.analyser);
+    this.props.attachAnalyser(
+      this.howlController.analyser,
+      this.howlController.howler.ctx.destination.context
+    );
     //this.threeVisualizer.attachAnalyser();
   }
 

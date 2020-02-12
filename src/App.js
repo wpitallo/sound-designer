@@ -5,6 +5,7 @@ import EffectEditor from "./content/EffectEditor.js";
 import ThreeVisualizer from "./components/threeVisualizer/ThreeVisualizer.js";
 import "./app.css";
 import PresetPlayer from "./content/PresetPlayer.js";
+import BackgroundVisualizer from "./components/backgroundVisualizer/backgroundVisualizer.js";
 
 class App extends React.Component {
   constructor(props) {
@@ -27,8 +28,9 @@ class App extends React.Component {
     this.attachAnalyser = this.attachAnalyser.bind(this);
   }
 
-  attachAnalyser(analyser) {
+  attachAnalyser(analyser, audioContext) {
     this.threeVisualizer.attachAnalyser(analyser);
+    //this.backgroundVisualizer.attachAnalyser(analyser, audioContext);
   }
 
   async menuItemClicked(menuEntity, menuItem) {
@@ -217,6 +219,9 @@ class App extends React.Component {
       >
         <div className="heading">
           <div alt="" className="adapter-logo">
+            {/* <BackgroundVisualizer
+              onRef={ref => (this.backgroundVisualizer = ref)}
+            /> */}
             <ThreeVisualizer onRef={ref => (this.threeVisualizer = ref)} />
           </div>
         </div>

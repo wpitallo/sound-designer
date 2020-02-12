@@ -78,6 +78,8 @@ export default class EaseType extends React.Component {
           </div>
         </div>
       );
+    } else {
+      easeType = <div />;
     }
 
     return easeType;

@@ -177,6 +177,18 @@ export default class WaveVisualizer extends React.Component {
   }
 
   render() {
+    let labelStyle = {
+      fontSize: "14px",
+      textAlign: "center",
+      height: "0px"
+    };
+
+    let labelStyle2 = {
+      fontSize: "14px",
+      textAlign: "center",
+      marginTop: "-25px"
+    };
+
     let controls;
     if (this.state.ready === true) {
       controls = (
@@ -188,7 +200,7 @@ export default class WaveVisualizer extends React.Component {
           stylingMode="text"
           style={{
             marginLeft: "15px",
-            marginTop: "5px",
+            marginTop: "15px",
             borderRadius: "50px",
             width: "50px",
             height: "50px",
@@ -206,11 +218,18 @@ export default class WaveVisualizer extends React.Component {
           className="flex-item no-border"
           style={{ paddingLeft: "2px", height: "255px" }}
         >
+          <div align="centre" style={labelStyle}>
+            84 seconds
+          </div>
           <div id="waveform" style={{ width: "100%" }} />
           <div id="waveform-regions" />
         </div>
+
         <div className="flex-item" style={{ height: "61px" }}>
           <div align="center">
+            <div align="centre" style={labelStyle2}>
+              84 elapsed &nbsp;&nbsp;&nbsp;&nbsp; remaining 84
+            </div>
             {/* <label style={{ position: "absolute", marginTop: "-30px" }}>
               {this.props.waveLabel}
             </label> */}

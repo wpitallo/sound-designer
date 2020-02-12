@@ -102,7 +102,9 @@ export default class ThreeVisualizer extends React.Component {
 
       this.renderer.domElement.className = "three-visualizer";
       this.loadedIntoDom = true;
+
       document.getElementById("out").appendChild(this.renderer.domElement);
+
       window.addEventListener("resize", this.onWindowResize, false);
     }
   }
