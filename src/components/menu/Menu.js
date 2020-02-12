@@ -18,10 +18,8 @@ export default class Menu extends React.Component {
       selectedMenuItem: undefined
     };
     this.menuItemClicked = this.menuItemClicked.bind(this);
-
     this.showMenuHandler = this.showMenuHandler.bind(this);
     this.hideMenuHandler = this.hideMenuHandler.bind(this);
-
     this.clearSelection = this.clearSelection.bind(this);
   }
 
@@ -171,7 +169,10 @@ export default class Menu extends React.Component {
                 height: "70px"
               }}
             >
-              <AddControl menuEntity={this.props.menuEntity} />
+              <AddControl
+                menuEntity={this.props.menuEntity}
+                parentName={this.props.parentName}
+              />
             </div>
             <div
               style={{

@@ -25,11 +25,13 @@ export default class WaveVisualizer extends React.Component {
   }
 
   componentDidMount() {
+    this.props.onRef(this);
     this.createWaveform();
     window.addEventListener("resize", this.createWaveform.bind(this));
   }
 
   componentWillUnmount() {
+    this.props.onRef(undefined);
     this.destroy();
   }
 
@@ -47,37 +49,73 @@ export default class WaveVisualizer extends React.Component {
     }
   }
 
+  updateRegion(startTime, endTime) {
+    debugger;
+    if (this.wavesurfer) {
+      if (this.wavesurfer.regions) {
+        this.wavesurfer.clearRegions();
+        this.wavesurfer.addRegion({
+          id: "newRegion",
+          start: this.props.effectData.startTime,
+          end: this.props.effectData.endTime,
+          loop: false,
+          color: "hsla(120, 100%, 30%, 0.25)"
+        });
+        this.wavesurfer.regions.disableDragSelection();
+        // this.wavesurfer.regions.list.newRegion.start = startTime;
+        // this.wavesurfer.regions.list.newRegion.end = endTime;
+      }
+    }
+  }
+
   createWaveform() {
     WaveSurfer.regions = RegionsPlugin;
 
     this.destroy();
+    if (this.props.effectData) {
+      let regions = {
+        regions: [
+          {
+            id: "newRegion",
+            start: this.props.effectData.startTime,
+            end: this.props.effectData.endTime,
+            loop: false,
+            color: "hsla(120, 100%, 30%, 0.25)"
+          }
+        ]
+      };
+      this.wavesurfer = WaveSurfer.create({
+        container: "#waveform",
+        waveColor: "#28fc03",
+        audioContext: this.props.howlController.howler.ctx.destination.context,
+        // backend: "MediaElement",
+        splitChannels: true,
+        responsive: true,
+        barWidth: 2,
+        barHeight: 1, // the height of the wave
+        barGap: null,
+        plugins: [RegionsPlugin.create(regions)]
+      });
+      this.wavesurfer.regions.disableDragSelection();
 
-    let regions = {
-      regions: [
-        {
-          id: "newRegion",
-          start: 1,
-          end: 3,
-          loop: false,
-          color: "hsla(120, 100%, 30%, 0.25)"
-        }
-      ]
-    };
-
-    this.wavesurfer = WaveSurfer.create({
-      container: "#waveform",
-      waveColor: "#28fc03",
-      audioContext: this.props.howlController.howler.ctx.destination.context,
-      // backend: "MediaElement",
-      splitChannels: true,
-      responsive: true,
-      barWidth: 2,
-      barHeight: 1, // the height of the wave
-      barGap: null,
-      plugins: [RegionsPlugin.create(regions)]
-    });
-
-    this.wavesurfer.regions.disableDragSelection();
+      this.wavesurfer.regions.list.newRegion.reSizeCallback = region => {
+        console.log(region.start);
+        console.log(region.end);
+        console.log(region);
+      };
+    } else {
+      this.wavesurfer = WaveSurfer.create({
+        container: "#waveform",
+        waveColor: "#28fc03",
+        audioContext: this.props.howlController.howler.ctx.destination.context,
+        // backend: "MediaElement",
+        splitChannels: true,
+        responsive: true,
+        barWidth: 2,
+        barHeight: 1, // the height of the wave
+        barGap: null
+      });
+    }
 
     //this.wavesurfer.load("/sounds/summarySounds.mp3");
 
@@ -136,12 +174,6 @@ export default class WaveVisualizer extends React.Component {
       //   color: "hsla(400, 100%, 30%, 0.5)"
       // });
     });
-
-    this.wavesurfer.regions.list.newRegion.reSizeCallback = region => {
-      console.log(region.start);
-      console.log(region.end);
-      console.log(region);
-    };
   }
 
   render() {
@@ -156,7 +188,7 @@ export default class WaveVisualizer extends React.Component {
           stylingMode="text"
           style={{
             marginLeft: "15px",
-            marginTop: "10px",
+            marginTop: "5px",
             borderRadius: "50px",
             width: "50px",
             height: "50px",
@@ -170,15 +202,18 @@ export default class WaveVisualizer extends React.Component {
 
     return (
       <div className="flex-container-column">
-        <div className="flex-item no-border" style={{ paddingLeft: "2px" }}>
+        <div
+          className="flex-item no-border"
+          style={{ paddingLeft: "2px", height: "255px" }}
+        >
           <div id="waveform" style={{ width: "100%" }} />
           <div id="waveform-regions" />
         </div>
-        <div className="flex-item" style={{ height: "70px" }}>
+        <div className="flex-item" style={{ height: "61px" }}>
           <div align="center">
-            <label style={{ position: "absolute", marginTop: "-30px" }}>
-              {this.props.selectedEffect.name}
-            </label>
+            {/* <label style={{ position: "absolute", marginTop: "-30px" }}>
+              {this.props.waveLabel}
+            </label> */}
             {controls}
           </div>
         </div>

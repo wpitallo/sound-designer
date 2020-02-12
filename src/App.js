@@ -2,8 +2,9 @@ import React from "react";
 
 import Menu from "./components/menu/Menu.js";
 import EffectEditor from "./content/EffectEditor.js";
-
+import ThreeVisualizer from "./components/threeVisualizer/ThreeVisualizer.js";
 import "./app.css";
+import PresetPlayer from "./content/PresetPlayer.js";
 
 class App extends React.Component {
   constructor(props) {
@@ -23,6 +24,11 @@ class App extends React.Component {
       opacity: 1
     };
     this.menuItemClicked = this.menuItemClicked.bind(this);
+    this.attachAnalyser = this.attachAnalyser.bind(this);
+  }
+
+  attachAnalyser(analyser) {
+    this.threeVisualizer.attachAnalyser(analyser);
   }
 
   async menuItemClicked(menuEntity, menuItem) {
@@ -30,12 +36,12 @@ class App extends React.Component {
       if (this.spritesMenu) this.spritesMenu.clearSelection();
 
       this.setState({ selectedEffect: undefined });
+      this.setState({ effectsData: undefined });
       this.setState({ selectedPreset: undefined });
       this.setState({ selectedSound: undefined });
       this.setState({ selectedSprite: undefined });
       this.setState({ selectedProject: menuItem });
 
-      this.setState({ effectsData: undefined });
       this.setState({ presetsData: undefined });
       this.setState({ soundsData: undefined });
       this.setState({
@@ -54,13 +60,13 @@ class App extends React.Component {
       // }
 
       this.setState({ selectedEffect: undefined });
+      this.setState({ effectsData: undefined });
       this.setState({ selectedPreset: undefined });
       this.setState({ selectedSound: undefined });
       this.setState({ selectedSprite: menuItem });
 
-      this.setState({ effectsData: undefined });
       this.setState({ presetsData: undefined });
-      debugger;
+
       this.setState({
         soundsData: this.state.spritesData.find(
           x => x.id === this.state.selectedSprite.id
@@ -80,16 +86,17 @@ class App extends React.Component {
       if (!foundDefault) {
         data.push({
           id: 0,
-          name: "Default"
+          name: "Default",
+          effects: []
         });
         data.sort((a, b) => a.id - b.id);
       }
 
       this.setState({ selectedEffect: undefined });
+      this.setState({ effectsData: undefined });
+
       this.setState({ selectedPreset: undefined });
       this.setState({ selectedSound: menuItem });
-
-      this.setState({ effectsData: undefined });
       this.setState({ presetsData: data });
     }
 
@@ -98,7 +105,6 @@ class App extends React.Component {
 
       this.setState({ selectedEffect: undefined });
       this.setState({ selectedPreset: menuItem });
-      debugger;
       this.setState({
         effectsData: this.state.presetsData.find(
           x => x.id === this.state.selectedPreset.id
@@ -175,6 +181,7 @@ class App extends React.Component {
       effectsMenu = (
         <Menu
           menuEntity="effects"
+          parentName={this.state.selectedPreset.name}
           onRef={ref => (this.effectsMenu = ref)}
           data={this.state.effectsData}
           menuItemClicked={this.menuItemClicked}
@@ -183,11 +190,21 @@ class App extends React.Component {
       );
     }
     let mainContent;
+    if (this.state.selectedPreset && !this.state.selectedEffect) {
+      mainContent = (
+        <PresetPlayer
+          selectedPreset={this.state.selectedPreset}
+          selectedSound={this.state.selectedSound}
+          attachAnalyser={this.attachAnalyser}
+        />
+      );
+    }
     if (this.state.selectedEffect) {
       mainContent = (
         <EffectEditor
           selectedEffect={this.state.selectedEffect}
           selectedSound={this.state.selectedSound}
+          attachAnalyser={this.attachAnalyser}
         />
       );
     }
@@ -199,7 +216,9 @@ class App extends React.Component {
         }}
       >
         <div className="heading">
-          <div alt="" className="adapter-logo" />
+          <div alt="" className="adapter-logo">
+            <ThreeVisualizer onRef={ref => (this.threeVisualizer = ref)} />
+          </div>
         </div>
         <div className="heading">
           <div className="info text-center">

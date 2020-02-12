@@ -7,6 +7,11 @@ export default class AddControl extends React.Component {
     this.state = {};
   }
   render() {
+    let disabled = false;
+    if (this.props.parentName === "Default") {
+      disabled = true;
+    }
+
     return (
       <div
         style={{
@@ -16,14 +21,21 @@ export default class AddControl extends React.Component {
         }}
       >
         <TextBox
-          style={{ marginTop: "18px", width: "145px", float: "left" }}
+          style={{
+            marginTop: "18px",
+            width: "145px",
+            float: "left",
+            zIndex: "-100"
+          }}
           placeholder={this.props.menuEntity}
           showClearButton={true}
+          disabled={disabled}
         />
         <Button
           icon="add"
           type="normal"
           text="Add"
+          disabled={disabled}
           onClick={this.doneClick}
           style={{
             marginTop: "18px",

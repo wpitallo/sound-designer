@@ -41,82 +41,82 @@ export default class ThreeVisualizer extends React.Component {
 
   componentDidMount() {
     this.props.onRef(this);
+    if (!this.loadedIntoDom) {
+      //here comes the webgl
+      this.scene = new THREE.Scene();
+      this.group = new THREE.Group();
+      this.camera = new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      this.camera.position.set(0, 0, 100);
+      this.camera.lookAt(this.scene.position);
+      this.scene.add(this.camera);
+
+      this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
+
+      // let planeGeometry = new THREE.PlaneGeometry(800, 800, 20, 20);
+      // let planeMaterial = new THREE.MeshLambertMaterial({
+      //   color: 0xd3d3d3,
+      //   side: THREE.DoubleSide,
+      //   wireframe: true
+      // });
+
+      // this.plane = new THREE.Mesh(planeGeometry, planeMaterial);
+      // this.plane.rotation.x = -0.5 * Math.PI;
+      // this.plane.position.set(0, 30, 0);
+      // this.group.add(this.plane);
+
+      // this.plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
+      // this.plane2.rotation.x = -0.5 * Math.PI;
+      // this.plane2.position.set(0, -30, 0);
+      // this.group.add(this.plane2);
+
+      let icosahedronGeometry = new THREE.IcosahedronGeometry(10, 4);
+      let lambertMaterial = new THREE.MeshLambertMaterial({
+        color: 0xfc039d,
+        wireframe: true
+      });
+
+      this.ball = new THREE.Mesh(icosahedronGeometry, lambertMaterial);
+      this.ball.position.set(0, 0, 0);
+      this.group.add(this.ball);
+
+      let ambientLight = new THREE.AmbientLight(0xaaaaaa);
+      this.scene.add(ambientLight);
+
+      let spotLight = new THREE.SpotLight(0xffffff);
+      spotLight.intensity = 0.9;
+      spotLight.position.set(-10, 40, 20);
+      spotLight.lookAt(this.ball);
+      spotLight.castShadow = true;
+      this.scene.add(spotLight);
+
+      // let orbitControls = new THREE.OrbitControls(camera);
+      // orbitControls.autoRotate = true;
+
+      this.scene.add(this.group);
+
+      this.renderer.domElement.className = "three-visualizer";
+      this.loadedIntoDom = true;
+      document.getElementById("out").appendChild(this.renderer.domElement);
+      window.addEventListener("resize", this.onWindowResize, false);
+    }
   }
   componentWillUnmount() {
     this.props.onRef(undefined);
   }
 
-  attachAnalyser() {
-    this.props.analyser.fftSize = 512;
-    let bufferLength = this.props.analyser.frequencyBinCount;
+  attachAnalyser(analyser) {
+    this.analyser = analyser;
+    this.analyser.fftSize = 512;
+    let bufferLength = this.analyser.frequencyBinCount;
     this.dataArray = new Uint8Array(bufferLength);
 
-    //here comes the webgl
-    this.scene = new THREE.Scene();
-    this.group = new THREE.Group();
-    this.camera = new THREE.PerspectiveCamera(
-      45,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    this.camera.position.set(0, 0, 100);
-    this.camera.lookAt(this.scene.position);
-    this.scene.add(this.camera);
-
-    this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-
-    // let planeGeometry = new THREE.PlaneGeometry(800, 800, 20, 20);
-    // let planeMaterial = new THREE.MeshLambertMaterial({
-    //   color: 0xd3d3d3,
-    //   side: THREE.DoubleSide,
-    //   wireframe: true
-    // });
-
-    // this.plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    // this.plane.rotation.x = -0.5 * Math.PI;
-    // this.plane.position.set(0, 30, 0);
-    // this.group.add(this.plane);
-
-    // this.plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
-    // this.plane2.rotation.x = -0.5 * Math.PI;
-    // this.plane2.position.set(0, -30, 0);
-    // this.group.add(this.plane2);
-
-    let icosahedronGeometry = new THREE.IcosahedronGeometry(10, 4);
-    let lambertMaterial = new THREE.MeshLambertMaterial({
-      color: 0xfc039d,
-      wireframe: true
-    });
-
-    this.ball = new THREE.Mesh(icosahedronGeometry, lambertMaterial);
-    this.ball.position.set(0, 0, 0);
-    this.group.add(this.ball);
-
-    let ambientLight = new THREE.AmbientLight(0xaaaaaa);
-    this.scene.add(ambientLight);
-
-    let spotLight = new THREE.SpotLight(0xffffff);
-    spotLight.intensity = 0.9;
-    spotLight.position.set(-10, 40, 20);
-    spotLight.lookAt(this.ball);
-    spotLight.castShadow = true;
-    this.scene.add(spotLight);
-
-    // let orbitControls = new THREE.OrbitControls(camera);
-    // orbitControls.autoRotate = true;
-
-    this.scene.add(this.group);
-
-    this.renderer.domElement.className = "three-visualizer";
-
-    document.getElementById("out").appendChild(this.renderer.domElement);
-
-    window.addEventListener("resize", this.onWindowResize, false);
-
     this.renderViz();
-
     //this.audio.play();
   }
 
@@ -172,7 +172,7 @@ export default class ThreeVisualizer extends React.Component {
   }
 
   renderViz() {
-    this.props.analyser.getByteFrequencyData(this.dataArray);
+    this.analyser.getByteFrequencyData(this.dataArray);
 
     let lowerHalfArray = this.dataArray.slice(0, this.dataArray.length / 2 - 1);
     let upperHalfArray = this.dataArray.slice(
@@ -208,10 +208,7 @@ export default class ThreeVisualizer extends React.Component {
   render() {
     return (
       <div id="content">
-        <div
-          id="out"
-          style={{ zIndex: 100, position: "absolute", pointerEvents: "none" }}
-        />
+        <div id="out" style={{ width: "1250px" }} />
       </div>
     );
   }

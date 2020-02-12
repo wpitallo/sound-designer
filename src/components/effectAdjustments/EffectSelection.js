@@ -1,9 +1,12 @@
 import React from "react";
 import { Button, TextBox, DropDownButton } from "devextreme-react";
 
-import DefaultAdjustment from "./DefaultAdjustment.js";
+import StartEndTime from "./StartEndTime.js";
+import EaseType from "./EaseType.js";
 
-export default class AudioAdjustmentRow extends React.Component {
+import ValueControls from "./ValueControls.js";
+
+export default class EffectSelection extends React.Component {
   constructor(props) {
     super(props);
 
@@ -22,6 +25,7 @@ export default class AudioAdjustmentRow extends React.Component {
       { name: "EaseOut" },
       { name: "EaseInOut" }
     ];
+
     this.onEaseTypeChanged = this.onEaseTypeChanged.bind(this);
 
     this.state = {
@@ -146,10 +150,19 @@ export default class AudioAdjustmentRow extends React.Component {
 
         <div className="flex-container-row">
           <div className="flex-item no-border">
-            <DefaultAdjustment
+            <StartEndTime
+              selectedEffect={this.state.selectedEffect}
+              howlController={this.props.howlController}
+              effectData={this.props.effectData}
+              easeType={this.state.easeType}
+              startTimeChanged={this.props.startTimeChanged}
+              endTimeChanged={this.props.endTimeChanged}
+            />
+            <ValueControls
               selectedEffect={this.state.selectedEffect}
               easeType={this.state.easeType}
             />
+            <EaseType easeType={this.state.easeType} />
           </div>
         </div>
       </div>

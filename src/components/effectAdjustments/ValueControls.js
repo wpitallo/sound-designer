@@ -1,42 +1,17 @@
 import React from "react";
-import { DropDownButton } from "devextreme-react";
-
-import Knob from "./knob/Knob.js";
 
 import VerticalSlider from "./verticalSlider/VerticalSlider.js";
-import EaseGraph from "./easeGraph/EaseGraph.js";
-
-import SeekTime from "./SeekTime.js";
+import Knob from "./knob/Knob.js";
 
 import "./slider.css";
 
-export default class AudioAdjustmentRow extends React.Component {
+export default class ValueControls extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleValue1Change = this.handleValue1Change.bind(this);
-    this.handleValue2Change = this.handleValue2Change.bind(this);
-
-    this.onEaseFunctionChanged = this.onEaseFunctionChanged.bind(this);
-
-    this.easeFunctions = [
-      { name: "Quad" },
-      { name: "Cubic" },
-      { name: "Quart" },
-      { name: "Quint" },
-      { name: "Sine" },
-      { name: "Expo" },
-      { name: "Circ" },
-      { name: "Back" },
-      { name: "Bounce" }
-    ];
-
     this.state = {
       stateValue1: 50,
-      stateValue2: 50,
-      startTime: 0,
-      endTime: 10,
-      easeFunction: this.easeFunctions[0]
+      stateValue2: 50
     };
 
     this.knobFlexItemStyle = {
@@ -54,18 +29,8 @@ export default class AudioAdjustmentRow extends React.Component {
       textAlign: "-webkit-center"
     };
 
-    this.EaseGraphFlexItemStyle = {
-      paddingLeft: "20px",
-      paddingRight: "20px",
-      textAlign: "-webkit-center",
-      marginTop: "-100px"
-    };
-
-    this.easeGraph = React.createRef();
-  }
-
-  onEaseFunctionChanged(e) {
-    this.setState({ easeFunction: e.itemData });
+    this.handleValue1Change = this.handleValue1Change.bind(this);
+    this.handleValue2Change = this.handleValue2Change.bind(this);
   }
 
   handleValue1Change(value) {
@@ -75,50 +40,6 @@ export default class AudioAdjustmentRow extends React.Component {
     this.setState({ stateValue2: value });
   }
   render() {
-    let easeType;
-    if (this.props.easeType.name !== "None") {
-      easeType = (
-        <div className="flex-container-colum">
-          <div
-            className="flex-item no-border"
-            style={this.EaseGraphFlexItemStyle}
-          >
-            <EaseGraph ref={this.easeGraph} />
-          </div>
-
-          <div className="flex-item no-border" style={this.knobFlexItemStyle}>
-            <DropDownButton
-              style={{
-                width: "285px",
-                textAlign: "left"
-              }}
-              text={this.state.easeFunction.name}
-              dropDownOptions={{ width: 300 }}
-              items={this.easeFunctions}
-              displayExpr="name"
-              onItemClick={this.onEaseFunctionChanged}
-            />
-          </div>
-        </div>
-      );
-    }
-
-    let seekType;
-    if (this.props.easeType.name === "None") {
-      seekType = (
-        <div className="flex-container-row">
-          <SeekTime label="Start Time:" />
-        </div>
-      );
-    } else {
-      seekType = (
-        <div className="flex-container-row">
-          <SeekTime label="Start Time:" />
-          <SeekTime label="End Time:" />
-        </div>
-      );
-    }
-
     let valueControllers;
 
     if (this.props.selectedEffect.name === "Volume") {
@@ -231,12 +152,6 @@ export default class AudioAdjustmentRow extends React.Component {
       }
     }
 
-    return (
-      <div className="flex-item no-border">
-        {seekType}
-        {valueControllers}
-        {easeType}
-      </div>
-    );
+    return valueControllers;
   }
 }
