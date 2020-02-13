@@ -55,7 +55,7 @@ export default class SeekTime extends React.Component {
             <Slider
               min={0}
               step={0.1}
-              max={this.props.effectData.duration}
+              max={this.props.effectData.soundDuration}
               value={this.props.effectData.startTime}
               showRange={false}
               className="seekSlider"
@@ -69,7 +69,7 @@ export default class SeekTime extends React.Component {
                 width={"100%"}
                 value={this.props.effectData.startTime}
                 min={0}
-                max={this.props.effectData.duration}
+                max={this.props.effectData.soundDuration}
                 step={0.1}
                 showSpinButtons={true}
                 onValueChanged={this.props.onValueChanged}
@@ -93,8 +93,8 @@ export default class SeekTime extends React.Component {
             <Slider
               min={0}
               step={0.1}
-              max={this.props.effectData.duration}
-              defaultValue={this.props.effectData.endTime}
+              max={this.props.effectData.soundDuration}
+              value={this.props.effectData.endTime}
               showRange={false}
               className="seekSlider"
               onValueChanged={this.props.onValueChanged}
@@ -107,7 +107,7 @@ export default class SeekTime extends React.Component {
                 width={"100%"}
                 value={this.props.effectData.endTime}
                 min={0}
-                max={this.props.effectData.duration}
+                max={this.props.effectData.soundDuration}
                 step={0.1}
                 showSpinButtons={true}
                 onValueChanged={this.props.onValueChanged}

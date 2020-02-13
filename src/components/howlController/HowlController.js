@@ -5,13 +5,19 @@ import "howler-plugin-effect-chain";
 import Tuna from "tunajs";
 
 export default class HowlController {
-  constructor(loaded) {
-    this.loaded = loaded;
-
+  constructor() {
     this.howler = Howler;
+    //this.state = { duration: 0 };
+    this.load = this.load.bind(this);
+    this.unload = this.unload.bind(this);
+    this.play = this.play.bind(this);
+    this.seek = this.seek.bind(this);
+    this.stop = this.stop.bind(this);
+    this.pause = this.stop.bind(this);
+    this.addFilter = this.addFilter.bind(this);
   }
 
-  unload() {
+  unload(callback) {
     if (this.sound) {
       this.sound.unload();
     }
@@ -20,9 +26,10 @@ export default class HowlController {
       this.analyser.disconnect(Howler.ctx.destination);
       this.analyser = undefined;
     }
+    if (callback) callback();
   }
 
-  load(src) {
+  load(src, callback) {
     this.unload();
 
     this.sound = new Howl({
@@ -30,20 +37,55 @@ export default class HowlController {
     });
 
     this.sound.once("load", () => {
-      this.duration = this.formatTime(Math.round(this.sound.duration()));
-      this.loaded();
+      this.soundDuration = this.sound.duration();
+      this.formattedSoundDuration = this.formatTime(
+        Math.round(this.sound.duration())
+      );
+
+      this.analyser = Howler.ctx.createAnalyser();
+
+      // Connect master gain to analyzer
+      Howler.masterGain.connect(this.analyser);
+
+      //this.addFilter();
+
+      // Connect analyzer to destination
+      this.analyser.connect(Howler.ctx.destination);
+
+      callback();
     });
+  }
 
-    // Create analyzer
-    this.analyser = Howler.ctx.createAnalyser();
+  duration() {
+    return this.soundDuration;
+  }
 
-    // Connect master gain to analyzer
-    Howler.masterGain.connect(this.analyser);
+  play() {
+    this.sound.play();
+  }
 
-    //this.addFilter();
+  seek(time) {
+    this.sound.seek(time);
+  }
 
-    // Connect analyzer to destination
-    this.analyser.connect(Howler.ctx.destination);
+  stop() {
+    this.sound.stop();
+  }
+
+  pause() {
+    this.sound.pause();
+  }
+
+  step() {
+    // Determine our current seek position.
+    var seek = this.sound.seek() || 0;
+    console.log(this.formatTime(Math.round(seek)));
+    //progress.style.width = (((seek / sound.duration()) * 100) || 0) + '%';
+
+    // If the sound is still playing, continue stepping.
+    if (this.sound.playing()) {
+      requestAnimationFrame(this.step.bind(this));
+    }
   }
 
   formatTime(secs) {

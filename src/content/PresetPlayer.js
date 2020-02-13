@@ -7,31 +7,6 @@ import WaveVisualizer from "../components/waveVisualizer/WaveVisualizer.js";
 export default class PresetPlayer extends React.Component {
   constructor(props) {
     super(props);
-    if (!this.howlController) {
-      this.howlController = new HowlController(() => {});
-      this.howlController.unload();
-      this.howlController.load(this.props.selectedSound.src);
-    }
-    this.howlChanged = this.howlChanged.bind(this);
-  }
-
-  componentDidMount() {
-    if (this.props.selectedSound.src) {
-      this.howlChanged();
-    }
-  }
-
-  componentWillUnmount() {
-    this.howlController.unload();
-    this.howlController = undefined;
-  }
-
-  howlChanged() {
-    this.props.attachAnalyser(
-      this.howlController.analyser,
-      this.howlController.howler.ctx.destination.context
-    );
-    //this.threeVisualizer.attachAnalyser();
   }
 
   render() {
@@ -57,7 +32,8 @@ export default class PresetPlayer extends React.Component {
           >
             <WaveVisualizer
               waveLabel={`Preset: ${this.props.selectedPreset.name}`}
-              howlController={this.howlController}
+              selectedSound={this.props.selectedSound}
+              howlController={this.props.howlController}
               src={this.props.selectedSound.src}
               onRef={ref => (this.waveVisualizer = ref)}
             />

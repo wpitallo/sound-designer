@@ -130,43 +130,43 @@ export default class WaveVisualizer extends React.Component {
     this.wavesurfer.on("play", () => {
       console.log("Play");
       this.setState({ icon: "fas fa-pause" });
-      this.props.howlController.sound.play();
+      this.props.howlController.play();
     });
 
     this.wavesurfer.on("pause", () => {
       console.log("Pause");
       //player.pauseVideo();
       this.setState({ icon: "fas fa-play" });
-      this.props.howlController.sound.pause();
+      this.props.howlController.pause();
     });
 
     this.wavesurfer.on("seek", progress => {
       console.log(progress);
-      this.props.howlController.sound.seek(
-        progress * this.props.howlController.sound.duration()
+      this.props.howlController.seek(
+        progress * this.props.selectedSound.soundDuration
       );
     });
 
     this.wavesurfer.on("waveform-ready", () => {
       console.log("Reset to beginning (waveform-ready)");
       this.setState({ ready: true });
-      this.props.howlController.sound.seek(0);
-      this.props.howlController.sound.stop();
+      this.props.howlController.seek(0);
+      this.props.howlController.stop();
     });
 
     this.wavesurfer.on("finish", () => {
       console.log("finish");
       this.setState({ icon: "fas fa-play" });
-      this.props.howlController.sound.seek(0);
-      this.props.howlController.sound.stop();
+      this.props.howlController.seek(0);
+      this.props.howlController.stop();
     });
 
     this.wavesurfer.on("ready", () => {
       console.log("Reset to beginning (ready)");
       this.setState({ ready: true });
       this.setState({ icon: "fas fa-play" });
-      this.props.howlController.sound.seek(0);
-      this.props.howlController.sound.stop();
+      this.props.howlController.seek(0);
+      this.props.howlController.stop();
 
       // this.wavesurfer.regions.create({
       //   start: 1,
@@ -212,6 +212,11 @@ export default class WaveVisualizer extends React.Component {
       );
     }
 
+    let soundDuration;
+    if (this.props.selectedSound) {
+      soundDuration = this.props.selectedSound.soundDuration;
+    }
+
     return (
       <div className="flex-container-column">
         <div
@@ -219,7 +224,7 @@ export default class WaveVisualizer extends React.Component {
           style={{ paddingLeft: "2px", height: "255px" }}
         >
           <div align="centre" style={labelStyle}>
-            84 seconds
+            {soundDuration}
           </div>
           <div id="waveform" style={{ width: "100%" }} />
           <div id="waveform-regions" />

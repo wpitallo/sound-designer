@@ -7,9 +7,16 @@ import "./app.css";
 import PresetPlayer from "./content/PresetPlayer.js";
 import BackgroundVisualizer from "./components/backgroundVisualizer/backgroundVisualizer.js";
 
+import HowlController from "./components/howlController/HowlController.js";
+
 class App extends React.Component {
   constructor(props) {
     super(props);
+
+    if (!this.howlController) {
+      this.howlController = new HowlController();
+    }
+
     this.state = {
       selectedProject: undefined,
       projectsData: undefined,
@@ -20,12 +27,27 @@ class App extends React.Component {
       selectedPreset: undefined,
       presetsData: undefined,
       selectedEffect: undefined,
-      effectsData: undefined,
+      effectData: undefined,
       width: "250px",
       opacity: 1
     };
     this.menuItemClicked = this.menuItemClicked.bind(this);
     this.attachAnalyser = this.attachAnalyser.bind(this);
+    this.howlLoaded = this.howlLoaded.bind(this);
+  }
+
+  howlLoaded() {
+    let selectedSound = this.state.selectedSound;
+    selectedSound.soundDuration = this.howlController.duration();
+
+    this.setState({ selectedSound: selectedSound });
+
+    this.attachAnalyser(
+      this.howlController.analyser,
+      this.howlController.howler.ctx.destination.context
+    );
+
+    //this.threeVisualizer.attachAnalyser();
   }
 
   attachAnalyser(analyser, audioContext) {
@@ -38,7 +60,7 @@ class App extends React.Component {
       if (this.spritesMenu) this.spritesMenu.clearSelection();
 
       this.setState({ selectedEffect: undefined });
-      this.setState({ effectsData: undefined });
+      this.setState({ effectData: undefined });
       this.setState({ selectedPreset: undefined });
       this.setState({ selectedSound: undefined });
       this.setState({ selectedSprite: undefined });
@@ -62,7 +84,7 @@ class App extends React.Component {
       // }
 
       this.setState({ selectedEffect: undefined });
-      this.setState({ effectsData: undefined });
+      this.setState({ effectData: undefined });
       this.setState({ selectedPreset: undefined });
       this.setState({ selectedSound: undefined });
       this.setState({ selectedSprite: menuItem });
@@ -80,6 +102,9 @@ class App extends React.Component {
 
       this.setState({ selectedSound: menuItem });
 
+      this.howlController.unload();
+      this.howlController.load(this.state.selectedSound.src, this.howlLoaded);
+
       let data = this.state.soundsData.find(
         x => x.id === this.state.selectedSound.id
       ).presets;
@@ -95,7 +120,7 @@ class App extends React.Component {
       }
 
       this.setState({ selectedEffect: undefined });
-      this.setState({ effectsData: undefined });
+      this.setState({ effectData: undefined });
 
       this.setState({ selectedPreset: undefined });
       this.setState({ selectedSound: menuItem });
@@ -108,14 +133,28 @@ class App extends React.Component {
       this.setState({ selectedEffect: undefined });
       this.setState({ selectedPreset: menuItem });
       this.setState({
-        effectsData: this.state.presetsData.find(
+        effectData: this.state.presetsData.find(
           x => x.id === this.state.selectedPreset.id
         ).effects
       });
     }
 
     if (menuEntity === "effects") {
+      if (!menuItem.effectData) {
+        menuItem.effectData = {};
+        menuItem.effectData.startTime = 0;
+        menuItem.effectData.endTime = this.state.selectedSound.soundDuration;
+        menuItem.effectData.soundDuration = this.state.selectedSound.soundDuration;
+      }
       this.setState({ selectedEffect: menuItem });
+    }
+  }
+
+  unloadPresetPlayer(callback) {
+    if (this.presetPlayer) {
+      this.presetPlayer.unload(() => callback());
+    } else {
+      callback();
     }
   }
 
@@ -179,13 +218,13 @@ class App extends React.Component {
     }
 
     let effectsMenu;
-    if (this.state.effectsData) {
+    if (this.state.effectData) {
       effectsMenu = (
         <Menu
           menuEntity="effects"
           parentName={this.state.selectedPreset.name}
           onRef={ref => (this.effectsMenu = ref)}
-          data={this.state.effectsData}
+          data={this.state.effectData}
           menuItemClicked={this.menuItemClicked}
           showMenu={this.showPresetsMenu}
         />
@@ -195,6 +234,7 @@ class App extends React.Component {
     if (this.state.selectedPreset && !this.state.selectedEffect) {
       mainContent = (
         <PresetPlayer
+          howlController={this.howlController}
           selectedPreset={this.state.selectedPreset}
           selectedSound={this.state.selectedSound}
           attachAnalyser={this.attachAnalyser}
@@ -204,6 +244,7 @@ class App extends React.Component {
     if (this.state.selectedEffect) {
       mainContent = (
         <EffectEditor
+          howlController={this.howlController}
           selectedEffect={this.state.selectedEffect}
           selectedSound={this.state.selectedSound}
           attachAnalyser={this.attachAnalyser}

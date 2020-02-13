@@ -1,40 +1,24 @@
 import React from "react";
 
-import HowlController from "../components/howlController/HowlController.js";
-
 import WaveVisualizer from "../components/waveVisualizer/WaveVisualizer.js";
 import EffectSelection from "../components/effectAdjustments/EffectSelection.js";
 
 export default class EffectEditor extends React.Component {
   constructor(props) {
     super(props);
-    if (!this.howlController) {
-      this.howlController = new HowlController(() => {});
-      this.howlController.unload();
-      this.howlController.load(this.props.selectedSound.src);
-    }
-    this.howlChanged = this.howlChanged.bind(this);
-
-    this.effectData = {};
-    this.effectData.duration = 0;
-    this.effectData.startTime = 0;
-
-    if (this.props.selectedEffect.effectData) {
-      this.effectData = this.props.selectedEffect.effectData;
-    }
-
-    if (this.howlController) {
-      this.effectData.duration = this.howlController.sound.duration(0);
-    }
-
-    this.effectData.endTime = this.effectData.duration;
+    this.state = { effectData: this.props.selectedEffect.effectData };
+    this.effectData = this.props.selectedEffect.effectData;
 
     this.startTimeChanged = this.startTimeChanged.bind(this);
     this.endTimeChanged = this.endTimeChanged.bind(this);
+  }
 
-    this.state = {
-      effectData: this.effectData
-    };
+  componentDidMount() {
+    debugger;
+    this.waveVisualizer.updateRegion(
+      this.state.effectData.startTime,
+      this.state.effectData.endTime
+    );
   }
 
   startTimeChanged(e) {
@@ -65,25 +49,6 @@ export default class EffectEditor extends React.Component {
     );
   }
 
-  componentDidMount() {
-    if (this.props.selectedSound.src) {
-      this.howlChanged();
-    }
-  }
-
-  componentWillUnmount() {
-    this.howlController.unload();
-    this.howlController = undefined;
-  }
-
-  howlChanged() {
-    this.props.attachAnalyser(
-      this.howlController.analyser,
-      this.howlController.howler.ctx.destination.context
-    );
-    //this.threeVisualizer.attachAnalyser();
-  }
-
   render() {
     let content;
     if (this.props.selectedSound.src) {
@@ -106,8 +71,9 @@ export default class EffectEditor extends React.Component {
           >
             <WaveVisualizer
               waveLabel={`Effect: ${this.props.selectedEffect.name}`}
+              selectedSound={this.props.selectedSound}
               effectData={this.state.effectData}
-              howlController={this.howlController}
+              howlController={this.props.howlController}
               src={this.props.selectedSound.src}
               onRef={ref => (this.waveVisualizer = ref)}
             />
@@ -121,8 +87,9 @@ export default class EffectEditor extends React.Component {
           >
             <div className="flex-container-row">
               <EffectSelection
-                howlController={this.howlController}
+                howlController={this.props.howlController}
                 effectData={this.state.effectData}
+                selectedSound={this.props.selectedSound}
                 startTimeChanged={this.startTimeChanged}
                 endTimeChanged={this.endTimeChanged}
               />
