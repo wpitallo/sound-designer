@@ -41,8 +41,8 @@ export default class ValueControls extends React.Component {
   }
   render() {
     let valueControllers;
-
-    if (this.props.selectedEffect.name === "Volume") {
+    debugger;
+    if (this.props.selectedEffectType.name === "Volume") {
       if (this.props.easeType.name === "None") {
         valueControllers = (
           <div className="flex-container-row">
@@ -106,7 +106,7 @@ export default class ValueControls extends React.Component {
       }
     }
 
-    if (this.props.selectedEffect.name === "Rate") {
+    if (this.props.selectedEffectType.name === "Rate") {
       if (this.props.easeType.name === "None") {
         valueControllers = (
           <div className="flex-container-row">

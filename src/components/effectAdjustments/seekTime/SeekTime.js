@@ -55,8 +55,8 @@ export default class SeekTime extends React.Component {
             <Slider
               min={0}
               step={0.1}
-              max={this.props.effectData.soundDuration}
-              value={this.props.effectData.startTime}
+              max={this.props.selectedEffect.effectData.soundDuration}
+              value={this.props.selectedEffect.effectData.startTime}
               showRange={false}
               className="seekSlider"
               onValueChanged={this.props.onValueChanged}
@@ -67,9 +67,9 @@ export default class SeekTime extends React.Component {
               <NumberBox
                 format="#0.##"
                 width={"100%"}
-                value={this.props.effectData.startTime}
+                value={this.props.selectedEffect.effectData.startTime}
                 min={0}
-                max={this.props.effectData.soundDuration}
+                max={this.props.selectedEffect.effectData.soundDuration}
                 step={0.1}
                 showSpinButtons={true}
                 onValueChanged={this.props.onValueChanged}
@@ -93,8 +93,8 @@ export default class SeekTime extends React.Component {
             <Slider
               min={0}
               step={0.1}
-              max={this.props.effectData.soundDuration}
-              value={this.props.effectData.endTime}
+              max={this.props.selectedEffect.effectData.soundDuration}
+              value={this.props.selectedEffect.effectData.endTime}
               showRange={false}
               className="seekSlider"
               onValueChanged={this.props.onValueChanged}
@@ -105,9 +105,9 @@ export default class SeekTime extends React.Component {
               <NumberBox
                 format="#0.##"
                 width={"100%"}
-                value={this.props.effectData.endTime}
+                value={this.props.selectedEffect.effectData.endTime}
                 min={0}
-                max={this.props.effectData.soundDuration}
+                max={this.props.selectedEffect.effectData.soundDuration}
                 step={0.1}
                 showSpinButtons={true}
                 onValueChanged={this.props.onValueChanged}

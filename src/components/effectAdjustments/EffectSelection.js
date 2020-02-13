@@ -29,13 +29,13 @@ export default class EffectSelection extends React.Component {
     this.onEaseTypeChanged = this.onEaseTypeChanged.bind(this);
 
     this.state = {
-      selectedEffect: this.howlerEffects[1],
+      selectedEffectType: this.howlerEffects[1],
       easeType: this.easeTypes[1]
     };
   }
 
   onHowlerEffectClick(e) {
-    this.setState({ selectedEffect: e.itemData });
+    this.setState({ selectedEffectType: e.itemData });
   }
 
   onEaseTypeChanged(e) {
@@ -43,6 +43,7 @@ export default class EffectSelection extends React.Component {
   }
 
   render() {
+    debugger;
     return (
       <div className="flex-item no-border">
         <div className="flex-container-row">
@@ -57,6 +58,7 @@ export default class EffectSelection extends React.Component {
               style={{ width: "100%", float: "left" }}
               placeholder="Effect Name"
               showClearButton={true}
+              text={this.props.selectedEffect.name}
             />
           </div>
           <div
@@ -117,8 +119,8 @@ export default class EffectSelection extends React.Component {
               style={{
                 width: "100%"
               }}
-              text={this.state.selectedEffect.name}
-              icon={this.state.selectedEffect.icon}
+              text={this.state.selectedEffectType.name}
+              icon={this.state.selectedEffectType.icon}
               dropDownOptions={{ width: 300 }}
               items={this.howlerEffects}
               displayExpr="name"
@@ -151,7 +153,7 @@ export default class EffectSelection extends React.Component {
         <div className="flex-container-row">
           <div className="flex-item no-border">
             <StartEndTime
-              selectedEffect={this.state.selectedEffect}
+              selectedEffect={this.props.selectedEffect}
               howlController={this.props.howlController}
               effectData={this.props.effectData}
               easeType={this.state.easeType}
@@ -159,7 +161,8 @@ export default class EffectSelection extends React.Component {
               endTimeChanged={this.props.endTimeChanged}
             />
             <ValueControls
-              selectedEffect={this.state.selectedEffect}
+              selectedEffect={this.props.selectedEffect}
+              selectedEffectType={this.state.selectedEffectType}
               easeType={this.state.easeType}
             />
             <EaseType easeType={this.state.easeType} />

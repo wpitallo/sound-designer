@@ -7,7 +7,6 @@ import Tuna from "tunajs";
 export default class HowlController {
   constructor() {
     this.howler = Howler;
-    //this.state = { duration: 0 };
     this.load = this.load.bind(this);
     this.unload = this.unload.bind(this);
     this.play = this.play.bind(this);
@@ -47,19 +46,10 @@ export default class HowlController {
       this.formattedSoundDuration = this.formatTime(
         Math.round(this.sound.duration())
       );
-
       this.elapsed = 0;
-
       this.analyser = Howler.ctx.createAnalyser();
-
-      // Connect master gain to analyzer
       Howler.masterGain.connect(this.analyser);
-
-      //this.addFilter();
-
-      // Connect analyzer to destination
       this.analyser.connect(Howler.ctx.destination);
-
       callback();
     });
   }

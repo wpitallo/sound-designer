@@ -55,8 +55,8 @@ export default class WaveVisualizer extends React.Component {
         this.wavesurfer.clearRegions();
         this.wavesurfer.addRegion({
           id: "newRegion",
-          start: this.props.effectData.startTime,
-          end: this.props.effectData.endTime,
+          start: this.props.selectedEffect.effectData.startTime,
+          end: this.props.selectedEffect.effectData.endTime,
           loop: false,
           color: "hsla(120, 100%, 30%, 0.25)"
         });
@@ -71,13 +71,13 @@ export default class WaveVisualizer extends React.Component {
     WaveSurfer.regions = RegionsPlugin;
 
     this.destroy();
-    if (this.props.effectData) {
+    if (this.props.selectedEffect) {
       let regions = {
         regions: [
           {
             id: "newRegion",
-            start: this.props.effectData.startTime,
-            end: this.props.effectData.endTime,
+            start: this.props.selectedEffect.effectData.startTime,
+            end: this.props.selectedEffect.effectData.endTime,
             loop: false,
             color: "hsla(120, 100%, 30%, 0.25)"
           }

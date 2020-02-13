@@ -40,6 +40,7 @@ export default class PresetPlayer extends React.Component {
               elapsedTime={this.state.elapsedTime}
               waveLabel={`Preset: ${this.props.selectedPreset.name}`}
               selectedSound={this.props.selectedSound}
+              selectedEffect={this.state.selectedEffect}
               howlController={this.props.howlController}
               src={this.props.selectedSound.src}
               onRef={ref => (this.waveVisualizer = ref)}

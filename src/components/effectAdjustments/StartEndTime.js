@@ -44,7 +44,7 @@ export default class StartEndTime extends React.Component {
             label="Start Time:"
             startSeeker={true}
             howlController={this.props.howlController}
-            effectData={this.props.effectData}
+            selectedEffect={this.props.selectedEffect}
             onValueChanged={this.props.startTimeChanged}
           />
         </div>
@@ -56,13 +56,13 @@ export default class StartEndTime extends React.Component {
             label="Start Time:"
             startSeeker={true}
             howlController={this.props.howlController}
-            effectData={this.props.effectData}
+            selectedEffect={this.props.selectedEffect}
             onValueChanged={this.props.startTimeChanged}
           />
           <SeekTime
             label="End Time:"
             howlController={this.props.howlController}
-            effectData={this.props.effectData}
+            selectedEffect={this.props.selectedEffect}
             onValueChanged={this.props.endTimeChanged}
           />
         </div>

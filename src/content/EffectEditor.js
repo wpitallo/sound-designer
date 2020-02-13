@@ -7,10 +7,10 @@ export default class EffectEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      effectData: this.props.selectedEffect.effectData,
+      selectedEffect: this.props.selectedEffect,
       elapsedTime: 0
     };
-    this.effectData = this.props.selectedEffect.effectData;
+    this.selectedEffect = this.props.selectedEffect;
 
     this.startTimeChanged = this.startTimeChanged.bind(this);
     this.endTimeChanged = this.endTimeChanged.bind(this);
@@ -18,8 +18,8 @@ export default class EffectEditor extends React.Component {
 
   componentDidMount() {
     this.waveVisualizer.updateRegion(
-      this.state.effectData.startTime,
-      this.state.effectData.endTime
+      this.state.selectedEffect.effectData.startTime,
+      this.state.selectedEffect.effectData.endTime
     );
 
     this.props.howlController.elapsedUpdate = elapsedTime => {
@@ -28,30 +28,30 @@ export default class EffectEditor extends React.Component {
   }
 
   startTimeChanged(e) {
-    this.effectData = this.state.effectData;
-    if (e.value > this.effectData.endTime) {
-      this.effectData.startTime = this.effectData.endTime;
+    this.selectedEffect = this.state.selectedEffect;
+    if (e.value > this.selectedEffect.effectData.endTime) {
+      this.selectedEffect.effectData.startTime = this.selectedEffect.effectData.endTime;
     } else {
-      this.effectData.startTime = e.value;
+      this.selectedEffect.effectData.startTime = e.value;
     }
-    this.setState({ effectData: this.effectData });
+    this.setState({ selectedEffect: this.selectedEffect });
     this.waveVisualizer.updateRegion(
-      this.effectData.startTime,
-      this.effectData.endTime
+      this.selectedEffect.effectData.startTime,
+      this.selectedEffect.effectData.endTime
     );
   }
 
   endTimeChanged(e) {
-    this.effectData = this.state.effectData;
-    if (e.value < this.effectData.startTime) {
-      this.effectData.endTime = this.effectData.startTime;
+    this.selectedEffect = this.state.selectedEffect;
+    if (e.value < this.selectedEffect.effectData.startTime) {
+      this.selectedEffect.effectData.endTime = this.selectedEffect.effectData.startTime;
     } else {
-      this.effectData.endTime = e.value;
+      this.selectedEffect.effectData.endTime = e.value;
     }
-    this.setState({ effectData: this.effectData });
+    this.setState({ selectedEffect: this.selectedEffect });
     this.waveVisualizer.updateRegion(
-      this.effectData.startTime,
-      this.effectData.endTime
+      this.selectedEffect.effectData.startTime,
+      this.selectedEffect.effectData.endTime
     );
   }
 
@@ -79,7 +79,7 @@ export default class EffectEditor extends React.Component {
               elapsedTime={this.state.elapsedTime}
               waveLabel={`Effect: ${this.props.selectedEffect.name}`}
               selectedSound={this.props.selectedSound}
-              effectData={this.state.effectData}
+              selectedEffect={this.state.selectedEffect}
               howlController={this.props.howlController}
               src={this.props.selectedSound.src}
               onRef={ref => (this.waveVisualizer = ref)}
@@ -95,7 +95,7 @@ export default class EffectEditor extends React.Component {
             <div className="flex-container-row">
               <EffectSelection
                 howlController={this.props.howlController}
-                effectData={this.state.effectData}
+                selectedEffect={this.state.selectedEffect}
                 selectedSound={this.props.selectedSound}
                 startTimeChanged={this.startTimeChanged}
                 endTimeChanged={this.endTimeChanged}
