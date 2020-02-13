@@ -6,7 +6,10 @@ import EffectSelection from "../components/effectAdjustments/EffectSelection.js"
 export default class EffectEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { effectData: this.props.selectedEffect.effectData };
+    this.state = {
+      effectData: this.props.selectedEffect.effectData,
+      elapsedTime: 0
+    };
     this.effectData = this.props.selectedEffect.effectData;
 
     this.startTimeChanged = this.startTimeChanged.bind(this);
@@ -14,11 +17,14 @@ export default class EffectEditor extends React.Component {
   }
 
   componentDidMount() {
-    debugger;
     this.waveVisualizer.updateRegion(
       this.state.effectData.startTime,
       this.state.effectData.endTime
     );
+
+    this.props.howlController.elapsedUpdate = elapsedTime => {
+      this.setState({ elapsedTime: elapsedTime });
+    };
   }
 
   startTimeChanged(e) {
@@ -70,6 +76,7 @@ export default class EffectEditor extends React.Component {
             }}
           >
             <WaveVisualizer
+              elapsedTime={this.state.elapsedTime}
               waveLabel={`Effect: ${this.props.selectedEffect.name}`}
               selectedSound={this.props.selectedSound}
               effectData={this.state.effectData}

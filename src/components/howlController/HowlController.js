@@ -13,7 +13,7 @@ export default class HowlController {
     this.play = this.play.bind(this);
     this.seek = this.seek.bind(this);
     this.stop = this.stop.bind(this);
-    this.pause = this.stop.bind(this);
+    this.pause = this.pause.bind(this);
     this.addFilter = this.addFilter.bind(this);
   }
 
@@ -33,7 +33,13 @@ export default class HowlController {
     this.unload();
 
     this.sound = new Howl({
-      src: [src]
+      src: [src],
+      onseek: () => {
+        requestAnimationFrame(this.step.bind(this));
+      },
+      onplay: () => {
+        requestAnimationFrame(this.step.bind(this));
+      }
     });
 
     this.sound.once("load", () => {
@@ -41,6 +47,8 @@ export default class HowlController {
       this.formattedSoundDuration = this.formatTime(
         Math.round(this.sound.duration())
       );
+
+      this.elapsed = 0;
 
       this.analyser = Howler.ctx.createAnalyser();
 
@@ -62,10 +70,11 @@ export default class HowlController {
 
   play() {
     this.sound.play();
+    this.step();
   }
 
   seek(time) {
-    this.sound.seek(time);
+    return this.sound.seek(time);
   }
 
   stop() {
@@ -77,13 +86,14 @@ export default class HowlController {
   }
 
   step() {
-    // Determine our current seek position.
-    var seek = this.sound.seek() || 0;
-    console.log(this.formatTime(Math.round(seek)));
-    //progress.style.width = (((seek / sound.duration()) * 100) || 0) + '%';
-
-    // If the sound is still playing, continue stepping.
     if (this.sound.playing()) {
+      if (!this.position) {
+        this.position = 0;
+      }
+      this.elapsed = this.sound.seek() || 0;
+      if (this.elapsedUpdate) {
+        this.elapsedUpdate(this.elapsed);
+      }
       requestAnimationFrame(this.step.bind(this));
     }
   }

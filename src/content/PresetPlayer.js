@@ -1,12 +1,18 @@
 import React from "react";
-
-import HowlController from "../components/howlController/HowlController.js";
-
 import WaveVisualizer from "../components/waveVisualizer/WaveVisualizer.js";
 
 export default class PresetPlayer extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      elapsedTime: 0
+    };
+  }
+
+  componentDidMount() {
+    this.props.howlController.elapsedUpdate = elapsedTime => {
+      this.setState({ elapsedTime: elapsedTime });
+    };
   }
 
   render() {
@@ -31,6 +37,7 @@ export default class PresetPlayer extends React.Component {
             }}
           >
             <WaveVisualizer
+              elapsedTime={this.state.elapsedTime}
               waveLabel={`Preset: ${this.props.selectedPreset.name}`}
               selectedSound={this.props.selectedSound}
               howlController={this.props.howlController}

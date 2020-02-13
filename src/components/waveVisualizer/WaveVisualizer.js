@@ -50,7 +50,6 @@ export default class WaveVisualizer extends React.Component {
   }
 
   updateRegion(startTime, endTime) {
-    debugger;
     if (this.wavesurfer) {
       if (this.wavesurfer.regions) {
         this.wavesurfer.clearRegions();
@@ -137,6 +136,7 @@ export default class WaveVisualizer extends React.Component {
       console.log("Pause");
       //player.pauseVideo();
       this.setState({ icon: "fas fa-play" });
+      debugger;
       this.props.howlController.pause();
     });
 
@@ -217,6 +217,9 @@ export default class WaveVisualizer extends React.Component {
       soundDuration = this.props.selectedSound.soundDuration;
     }
 
+    let remaining = soundDuration - this.props.elapsedTime;
+    remaining = remaining.toFixed(2);
+
     return (
       <div className="flex-container-column">
         <div
@@ -233,7 +236,8 @@ export default class WaveVisualizer extends React.Component {
         <div className="flex-item" style={{ height: "61px" }}>
           <div align="center">
             <div align="centre" style={labelStyle2}>
-              84 elapsed &nbsp;&nbsp;&nbsp;&nbsp; remaining 84
+              {this.props.elapsedTime.toFixed(2)} elapsed
+              &nbsp;&nbsp;&nbsp;&nbsp; remaining {remaining}
             </div>
             {/* <label style={{ position: "absolute", marginTop: "-30px" }}>
               {this.props.waveLabel}
