@@ -5,8 +5,6 @@ import RegionsPlugin from "./wavesurfer/plugin/regions.js";
 
 import { Button } from "devextreme-react";
 
-import "./wavesurfer.css";
-
 export default class WaveVisualizer extends React.Component {
   constructor(props) {
     super(props);
@@ -15,8 +13,23 @@ export default class WaveVisualizer extends React.Component {
     this.destroy = this.destroy.bind(this);
     this.state = {
       icon: "fas fa-play",
-      ready: false
+      ready: false,
+      waveSurfer: undefined
     };
+    this.waveFormId = "waveForm" + this.generateGuid();
+  }
+
+  generateGuid() {
+    var result, i, j;
+    result = "";
+    for (j = 0; j < 32; j++) {
+      if (j === 8 || j === 12 || j === 16 || j === 20) result = result + "-";
+      i = Math.floor(Math.random() * 16)
+        .toString(16)
+        .toUpperCase();
+      result = result + i;
+    }
+    return result;
   }
 
   playPause() {
@@ -71,109 +84,111 @@ export default class WaveVisualizer extends React.Component {
     WaveSurfer.regions = RegionsPlugin;
 
     this.destroy();
-    if (this.props.selectedEffect) {
-      let regions = {
-        regions: [
-          {
-            id: "newRegion",
-            start: this.props.selectedEffect.effectData.startTime,
-            end: this.props.selectedEffect.effectData.endTime,
-            loop: false,
-            color: "hsla(120, 100%, 30%, 0.25)"
-          }
-        ]
-      };
-      this.wavesurfer = WaveSurfer.create({
-        container: "#waveform",
-        waveColor: "#28fc03",
-        audioContext: this.props.howlController.howler.ctx.destination.context,
-        // backend: "MediaElement",
-        splitChannels: true,
-        responsive: true,
-        barWidth: 2,
-        barHeight: 1, // the height of the wave
-        barGap: null,
-        plugins: [RegionsPlugin.create(regions)]
-      });
-      this.wavesurfer.regions.disableDragSelection();
 
-      this.wavesurfer.regions.list.newRegion.reSizeCallback = region => {
-        console.log(region.start);
-        console.log(region.end);
-        console.log(region);
-      };
-    } else {
-      this.wavesurfer = WaveSurfer.create({
-        container: "#waveform",
-        waveColor: "#28fc03",
-        audioContext: this.props.howlController.howler.ctx.destination.context,
-        // backend: "MediaElement",
-        splitChannels: true,
-        responsive: true,
-        barWidth: 2,
-        barHeight: 1, // the height of the wave
-        barGap: null
+    if (document.getElementById(this.waveFormId)) {
+      if (this.props.selectedEffect) {
+        let regions = {
+          regions: [
+            {
+              id: "newRegion",
+              start: this.props.selectedEffect.effectData.startTime,
+              end: this.props.selectedEffect.effectData.endTime,
+              loop: false,
+              color: "hsla(120, 100%, 30%, 0.25)"
+            }
+          ]
+        };
+        this.wavesurfer = WaveSurfer.create({
+          container: "#" + this.waveFormId,
+          waveColor: "#28fc03",
+          audioContext: this.props.howlController.howler.ctx.destination
+            .context,
+          // backend: "MediaElement",
+          splitChannels: true,
+          responsive: true,
+          barWidth: 2,
+          barHeight: 1, // the height of the wave
+          barGap: null,
+          plugins: [RegionsPlugin.create(regions)]
+        });
+        this.wavesurfer.regions.disableDragSelection();
+
+        this.wavesurfer.regions.list.newRegion.reSizeCallback = region => {
+          console.log(region.start);
+          console.log(region.end);
+          console.log(region);
+        };
+      } else {
+        this.wavesurfer = WaveSurfer.create({
+          container: "#" + this.waveFormId,
+          waveColor: "#28fc03",
+          audioContext: this.props.howlController.howler.ctx.destination
+            .context,
+          // backend: "MediaElement",
+          splitChannels: true,
+          responsive: true,
+          barWidth: 2,
+          barHeight: 1, // the height of the wave
+          barGap: null
+        });
+      }
+      //this.wavesurfer.load("/sounds/summarySounds.mp3");
+
+      this.wavesurfer.load(this.props.src);
+      //this.wavesurfer.regions = RegionsPlugin;
+      //this.wavesurfer.backend.params.audioContext = this.props.howlController.howler.ctx.destination.context;
+
+      this.wavesurfer.setVolume(0);
+      this.wavesurfer.setMute(true);
+
+      this.wavesurfer.on("play", () => {
+        console.log("Play");
+        this.setState({ icon: "fas fa-pause" });
+        this.props.howlController.play();
+      });
+
+      this.wavesurfer.on("pause", () => {
+        console.log("Pause");
+        //player.pauseVideo();
+        this.setState({ icon: "fas fa-play" });
+        this.props.howlController.pause();
+      });
+
+      this.wavesurfer.on("seek", progress => {
+        console.log(progress);
+        this.props.howlController.seek(
+          progress * this.props.selectedSound.soundDuration
+        );
+      });
+
+      this.wavesurfer.on("waveform-ready", () => {
+        console.log("Reset to beginning (waveform-ready)");
+        this.setState({ ready: true });
+        this.props.howlController.seek(0);
+        this.props.howlController.stop();
+      });
+
+      this.wavesurfer.on("finish", () => {
+        console.log("finish");
+        this.setState({ icon: "fas fa-play" });
+        this.props.howlController.seek(0);
+        this.props.howlController.stop();
+      });
+
+      this.wavesurfer.on("ready", () => {
+        console.log("Reset to beginning (ready)");
+        this.setState({ ready: true });
+        this.setState({ icon: "fas fa-play" });
+        this.props.howlController.seek(0);
+        this.props.howlController.stop();
+
+        // this.wavesurfer.regions.create({
+        //   start: 1,
+        //   end: 4,
+        //   color: "hsla(400, 100%, 30%, 0.5)"
+        // });
       });
     }
-
-    //this.wavesurfer.load("/sounds/summarySounds.mp3");
-
-    this.wavesurfer.load(this.props.src);
-    //this.wavesurfer.regions = RegionsPlugin;
-
-    //this.wavesurfer.backend.params.audioContext = this.props.howlController.howler.ctx.destination.context;
-
-    this.wavesurfer.setVolume(0);
-    this.wavesurfer.setMute(true);
-
-    this.wavesurfer.on("play", () => {
-      console.log("Play");
-      this.setState({ icon: "fas fa-pause" });
-      this.props.howlController.play();
-    });
-
-    this.wavesurfer.on("pause", () => {
-      console.log("Pause");
-      //player.pauseVideo();
-      this.setState({ icon: "fas fa-play" });
-      debugger;
-      this.props.howlController.pause();
-    });
-
-    this.wavesurfer.on("seek", progress => {
-      console.log(progress);
-      this.props.howlController.seek(
-        progress * this.props.selectedSound.soundDuration
-      );
-    });
-
-    this.wavesurfer.on("waveform-ready", () => {
-      console.log("Reset to beginning (waveform-ready)");
-      this.setState({ ready: true });
-      this.props.howlController.seek(0);
-      this.props.howlController.stop();
-    });
-
-    this.wavesurfer.on("finish", () => {
-      console.log("finish");
-      this.setState({ icon: "fas fa-play" });
-      this.props.howlController.seek(0);
-      this.props.howlController.stop();
-    });
-
-    this.wavesurfer.on("ready", () => {
-      console.log("Reset to beginning (ready)");
-      this.setState({ ready: true });
-      this.setState({ icon: "fas fa-play" });
-      this.props.howlController.seek(0);
-      this.props.howlController.stop();
-
-      // this.wavesurfer.regions.create({
-      //   start: 1,
-      //   end: 4,
-      //   color: "hsla(400, 100%, 30%, 0.5)"
-      // });
-    });
   }
 
   render() {
@@ -229,7 +244,7 @@ export default class WaveVisualizer extends React.Component {
           <div align="centre" style={labelStyle}>
             {soundDuration}
           </div>
-          <div id="waveform" style={{ width: "100%" }} />
+          <div id={this.waveFormId} style={{ width: "100%" }} />
           <div id="waveform-regions" />
         </div>
 

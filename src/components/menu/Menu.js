@@ -169,10 +169,7 @@ export default class Menu extends React.Component {
                 height: "70px"
               }}
             >
-              <AddControl
-                menuEntity={this.props.menuEntity}
-                parentName={this.props.parentName}
-              />
+              <AddControl menuEntity={this.props.menuEntity} parentName={this.props.parentName} menuType={this.props.menuType} />
             </div>
             <div
               style={{
@@ -183,11 +180,7 @@ export default class Menu extends React.Component {
                 paddingRight: "1px"
               }}
             >
-              <MenuItems
-                data={this.props.data}
-                selectedMenuItem={this.state.selectedMenuItem}
-                menuItemClicked={this.menuItemClicked}
-              />
+              <MenuItems data={this.props.data} selectedMenuItem={this.state.selectedMenuItem} menuItemClicked={this.menuItemClicked} />
             </div>
           </div>
         </div>

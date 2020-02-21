@@ -123,9 +123,9 @@ export default class ThreeVisualizer extends React.Component {
   }
 
   onWindowResize() {
-    this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    // this.camera.aspect = window.innerWidth / window.innerHeight;
+    // this.camera.updateProjectionMatrix();
+    // this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
   makeRoughBall(mesh, bassFr, treFr) {

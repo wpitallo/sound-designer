@@ -43,7 +43,6 @@ export default class EffectSelection extends React.Component {
   }
 
   render() {
-    debugger;
     return (
       <div className="flex-item no-border">
         <div className="flex-container-row">

@@ -9,6 +9,10 @@ import BackgroundVisualizer from "./components/backgroundVisualizer/backgroundVi
 
 import HowlController from "./components/howlController/HowlController.js";
 
+import "./background.js";
+
+let baseId = "https://w97sc.sse.codesandbox.io/";
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -42,10 +46,7 @@ class App extends React.Component {
 
     this.setState({ selectedSound: selectedSound });
 
-    this.attachAnalyser(
-      this.howlController.analyser,
-      this.howlController.howler.ctx.destination.context
-    );
+    this.attachAnalyser(this.howlController.analyser, this.howlController.howler.ctx.destination.context);
 
     //this.threeVisualizer.attachAnalyser();
   }
@@ -69,9 +70,7 @@ class App extends React.Component {
       this.setState({ presetsData: undefined });
       this.setState({ soundsData: undefined });
       this.setState({
-        spritesData: this.state.projectsData.find(
-          x => x.id === this.state.selectedProject.id
-        ).sprites
+        spritesData: this.state.projectsData.find(x => x.id === this.state.selectedProject.id).sprites
       });
     }
     if (menuEntity === "sprites") {
@@ -92,9 +91,7 @@ class App extends React.Component {
       this.setState({ presetsData: undefined });
 
       this.setState({
-        soundsData: this.state.spritesData.find(
-          x => x.id === this.state.selectedSprite.id
-        ).sounds
+        soundsData: this.state.spritesData.find(x => x.id === this.state.selectedSprite.id).sounds
       });
     }
     if (menuEntity === "sounds") {
@@ -105,9 +102,7 @@ class App extends React.Component {
       this.howlController.unload();
       this.howlController.load(this.state.selectedSound.src, this.howlLoaded);
 
-      let data = this.state.soundsData.find(
-        x => x.id === this.state.selectedSound.id
-      ).presets;
+      let data = this.state.soundsData.find(x => x.id === this.state.selectedSound.id).presets;
 
       let foundDefault = data.find(x => x.name === "Default");
       if (!foundDefault) {
@@ -133,9 +128,7 @@ class App extends React.Component {
       this.setState({ selectedEffect: undefined });
       this.setState({ selectedPreset: menuItem });
       this.setState({
-        effectData: this.state.presetsData.find(
-          x => x.id === this.state.selectedPreset.id
-        ).effects
+        effectData: this.state.presetsData.find(x => x.id === this.state.selectedPreset.id).effects
       });
     }
 
@@ -159,8 +152,8 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    let dataHelper = await import("./data/projects.js");
-    let data = dataHelper.default.getData();
+    //let dataHelper = await import("./data/projects.js");
+    let data = await (async () => await (await fetch("https://w97sc.sse.codesandbox.io/projects")).json())();
     this.setState({ projectsData: data });
   }
 
@@ -174,6 +167,7 @@ class App extends React.Component {
           onRef={ref => (this.projectsMenu = ref)}
           data={this.state.projectsData}
           menuItemClicked={this.menuItemClicked}
+          menuType="create-directory"
         />
       );
     }
@@ -187,6 +181,7 @@ class App extends React.Component {
           data={this.state.spritesData}
           menuItemClicked={this.menuItemClicked}
           showMenu={this.showProjectsMenu}
+          menuType="create-directory"
         />
       );
     }
@@ -200,6 +195,7 @@ class App extends React.Component {
           data={this.state.soundsData}
           menuItemClicked={this.menuItemClicked}
           showMenu={this.showSpritesMenu}
+          menuType="multiple-files"
         />
       );
     }
@@ -213,6 +209,7 @@ class App extends React.Component {
           data={this.state.presetsData}
           menuItemClicked={this.menuItemClicked}
           showMenu={this.showSoundsMenu}
+          menuType="create-directory"
         />
       );
     }
@@ -227,6 +224,7 @@ class App extends React.Component {
           data={this.state.effectData}
           menuItemClicked={this.menuItemClicked}
           showMenu={this.showPresetsMenu}
+          menuType="create-directory"
         />
       );
     }
@@ -255,7 +253,10 @@ class App extends React.Component {
     return (
       <div
         style={{
-          height: "120px"
+          position: "absolute",
+          zIndex: 100,
+          width: "100vw",
+          height: "100vh"
         }}
       >
         <div className="heading">

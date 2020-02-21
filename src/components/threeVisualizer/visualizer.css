@@ -1,7 +1,9 @@
 .three-visualizer {
+  position: absolute;
+  height: 450px !important;
+  top: -89px;
+  left: 149px;
+  width: 955px !important;
   pointer-events: none;
-  margin-top: -160px;
-  z-index: 100;
-  width: 100% !important;
-  height: 600px !important;
+  z-index: 300 !important;
 }
