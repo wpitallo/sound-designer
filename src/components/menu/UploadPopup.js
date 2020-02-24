@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Popup } from "devextreme-react";
-import axios from "axios";
+import Upload from "./Upload";
 
 export default class UploadPopup extends React.Component {
   constructor(props) {
@@ -34,23 +34,7 @@ export default class UploadPopup extends React.Component {
           width={800}
           height={600}
         >
-          <p>
-            Full Name:&nbsp;
-            <span>{this.state.currentEmployee.FirstName}</span>&nbsp;
-            <span>{this.state.currentEmployee.LastName}</span>
-          </p>
-          <p>
-            Birth Date: <span>{this.state.currentEmployee.BirthDate}</span>
-          </p>
-          <p>
-            Address: <span>{this.state.currentEmployee.Address}</span>
-          </p>
-          <p>
-            Hire Date: <span>{this.state.currentEmployee.HireDate}</span>
-          </p>
-          <p>
-            Position: <span>{this.state.currentEmployee.Position}</span>
-          </p>
+          <Upload serverBaseUrl={this.props.serverBaseUrl} selectedProject={this.props.selectedProject} selectedSprite={this.props.selectedSprite} />
         </Popup>
       </div>
     );

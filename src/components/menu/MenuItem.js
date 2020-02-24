@@ -17,7 +17,7 @@ export default function MenuItem(props) {
           props.menuItemClicked(props.item);
         }}
       >
-        {props.item.id}
+        {props.item.name}
       </Button>
     </div>
   );

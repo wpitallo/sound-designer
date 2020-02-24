@@ -59,7 +59,7 @@ let hs = 0; // Hue-Start
 let he = 360; // Hue-End
 
 let canvas = document.getElementById("background-canvas");
-debugger;
+
 var renderer = new THREE.WebGLRenderer({
   canvas: canvas,
   antialias: true

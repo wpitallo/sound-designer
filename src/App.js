@@ -11,7 +11,7 @@ import HowlController from "./components/howlController/HowlController.js";
 
 import "./background.js";
 
-let baseId = "https://w97sc.sse.codesandbox.io/";
+let serverBaseUrl = "https://w97sc.sse.codesandbox.io/";
 
 class App extends React.Component {
   constructor(props) {
@@ -38,6 +38,7 @@ class App extends React.Component {
     this.menuItemClicked = this.menuItemClicked.bind(this);
     this.attachAnalyser = this.attachAnalyser.bind(this);
     this.howlLoaded = this.howlLoaded.bind(this);
+    this.refreshData = this.refreshData.bind(this);
   }
 
   howlLoaded() {
@@ -107,11 +108,12 @@ class App extends React.Component {
       let foundDefault = data.find(x => x.name === "Default");
       if (!foundDefault) {
         data.push({
-          id: 0,
+          id: "DEFAULT",
+          order: 0,
           name: "Default",
           effects: []
         });
-        data.sort((a, b) => a.id - b.id);
+        data.sort((a, b) => a.order - b.order);
       }
 
       this.setState({ selectedEffect: undefined });
@@ -143,6 +145,12 @@ class App extends React.Component {
     }
   }
 
+  refreshData(menuEntity, data) {
+    if (menuEntity === "projects") {
+      this.setState({ projectsData: data });
+    }
+  }
+
   unloadPresetPlayer(callback) {
     if (this.presetPlayer) {
       this.presetPlayer.unload(() => callback());
@@ -153,7 +161,7 @@ class App extends React.Component {
 
   async componentDidMount() {
     //let dataHelper = await import("./data/projects.js");
-    let data = await (async () => await (await fetch("https://w97sc.sse.codesandbox.io/projects")).json())();
+    let data = await (async () => await (await fetch(`${serverBaseUrl}projects`)).json())();
     this.setState({ projectsData: data });
   }
 
@@ -162,12 +170,14 @@ class App extends React.Component {
     if (this.state.projectsData) {
       projectsMenu = (
         <Menu
+          serverBaseUrl={serverBaseUrl}
           menuEntity="projects"
           noParent={true}
           onRef={ref => (this.projectsMenu = ref)}
           data={this.state.projectsData}
           menuItemClicked={this.menuItemClicked}
           menuType="create-directory"
+          refreshData={this.refreshData}
         />
       );
     }
@@ -176,6 +186,7 @@ class App extends React.Component {
     if (this.state.spritesData) {
       spritesMenu = (
         <Menu
+          serverBaseUrl={serverBaseUrl}
           menuEntity="sprites"
           onRef={ref => (this.spritesMenu = ref)}
           data={this.state.spritesData}
@@ -190,8 +201,11 @@ class App extends React.Component {
     if (this.state.soundsData) {
       soundsMenu = (
         <Menu
+          serverBaseUrl={serverBaseUrl}
           menuEntity="sounds"
           onRef={ref => (this.soundsMenu = ref)}
+          selectedProject={this.state.selectedProject}
+          selectedSprite={this.state.selectedSprite}
           data={this.state.soundsData}
           menuItemClicked={this.menuItemClicked}
           showMenu={this.showSpritesMenu}
@@ -204,6 +218,7 @@ class App extends React.Component {
     if (this.state.presetsData) {
       presetsMenu = (
         <Menu
+          serverBaseUrl={serverBaseUrl}
           menuEntity="presets"
           onRef={ref => (this.presetsMenu = ref)}
           data={this.state.presetsData}
@@ -218,6 +233,7 @@ class App extends React.Component {
     if (this.state.effectData) {
       effectsMenu = (
         <Menu
+          serverBaseUrl={serverBaseUrl}
           menuEntity="effects"
           parentName={this.state.selectedPreset.name}
           onRef={ref => (this.effectsMenu = ref)}

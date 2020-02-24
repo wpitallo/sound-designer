@@ -2,69 +2,70 @@ import React from "react";
 import { Button, TextBox } from "devextreme-react";
 import UploadPopup from "./UploadPopup";
 import axios from "axios";
+import DialogPopup from "../dialogPopup/DialogPopup";
 
 export default class AddControl extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      addText: "",
+      notificationVisible: false
+    };
+    this.onClickHandler = this.onClickHandler.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
+    this.dismissNotification = this.dismissNotification.bind(this);
   }
 
-  onChangeHandler = event => {
-    this.setState({
-      selectedFile: event.target.files
-    });
+  // onChangeHandler = event => {
+  //   this.setState({
+  //     selectedFile: event.target.files
+  //   });
+  // };
+
+  handleTextChange = e => {
+    this.setState({ addText: e.event.target.value });
   };
 
-  onClickHandler = () => {
-    const data = new FormData();
-    for (var x = 0; x < this.state.selectedFile.length; x++) {
-      data.append("file", this.state.selectedFile[x]);
+  onClickHandler = async e => {
+    const result = await axios.post(`${this.props.serverBaseUrl}${this.props.menuEntity}?id=${this.state.addText}`);
+    debugger;
+    if (result.data.status === "ok") {
+      this.props.refreshData(this.props.menuEntity, result.data.message);
+    } else {
+      this.setState({ notificationVisible: true });
+      this.setState({ notificationTitle: `Add ${this.props.menuEntity} error` });
+      this.setState({ notificationMessage: result.data.message });
     }
-
-    axios
-      .post("http://localhost:8000/upload", data, {
-        // receive two    parameter endpoint url ,form data
-      })
-
-      .then(res => {
-        // then print response status
-        console.log(res.statusText);
-      });
   };
 
-  checkMimeType = event => {
-    //getting file object
-    let files = event.target.files;
-    //define message container
-    let err = "";
-    // list allow mime type
-    const types = ["image/png", "image/jpeg", "image/gif"];
-    // loop access array
-    for (var x = 0; x < files.length; x++) {
-      // compare file type find doesn't matach
-      if (types.every(type => files[x].type !== type)) {
-        // create error message and assign to container
-        err += files[x].type + " is not a supported format\n";
-      }
-    }
-
-    if (err !== "") {
-      // if message not same old that mean has error
-      event.target.value = null; // discard selected file
-      console.log(err);
-      return false;
-    }
-    return true;
-  };
+  dismissNotification() {
+    this.setState({ notificationVisible: false });
+  }
 
   render() {
     let disabled = false;
+
+    let error = (
+      <DialogPopup
+        notificationVisible={this.state.notificationVisible}
+        dismissNotification={this.dismissNotification}
+        notificationTitle={this.state.notificationTitle}
+        notificationMessage={this.state.notificationMessage}
+      />
+    );
+
     if (this.props.parentName === "Default") {
       disabled = true;
     }
     let control;
     if (this.props.menuType === "multiple-files") {
-      control = <UploadPopup />;
+      control = (
+        <UploadPopup
+          serverBaseUrl={this.props.serverBaseUrl}
+          selectedProject={this.props.selectedProject}
+          selectedSprite={this.props.selectedSprite}
+        />
+      );
     }
     if (this.props.menuType === "create-directory") {
       control = (
@@ -75,6 +76,7 @@ export default class AddControl extends React.Component {
             overflow: "hidden"
           }}
         >
+          {error}
           <TextBox
             style={{
               marginTop: "18px",
@@ -84,13 +86,15 @@ export default class AddControl extends React.Component {
             placeholder={this.props.menuEntity}
             showClearButton={true}
             disabled={disabled}
+            value={this.state.addText}
+            onChange={this.handleTextChange}
           />
           <Button
             icon="add"
             type="normal"
             text="Add"
             disabled={disabled}
-            onClick={this.doneClick}
+            onClick={this.onClickHandler}
             style={{
               marginTop: "18px",
               overflow: "hidden",

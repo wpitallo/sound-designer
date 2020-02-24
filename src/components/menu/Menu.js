@@ -169,7 +169,15 @@ export default class Menu extends React.Component {
                 height: "70px"
               }}
             >
-              <AddControl menuEntity={this.props.menuEntity} parentName={this.props.parentName} menuType={this.props.menuType} />
+              <AddControl
+                selectedProject={this.props.selectedProject}
+                selectedSprite={this.props.selectedSprite}
+                serverBaseUrl={this.props.serverBaseUrl}
+                menuEntity={this.props.menuEntity}
+                parentName={this.props.parentName}
+                menuType={this.props.menuType}
+                refreshData={this.props.refreshData}
+              />
             </div>
             <div
               style={{
