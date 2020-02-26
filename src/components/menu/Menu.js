@@ -177,6 +177,7 @@ export default class Menu extends React.Component {
                 parentName={this.props.parentName}
                 menuType={this.props.menuType}
                 refreshData={this.props.refreshData}
+                getAddUrl={this.props.getAddUrl}
               />
             </div>
             <div

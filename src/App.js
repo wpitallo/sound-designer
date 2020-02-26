@@ -39,6 +39,7 @@ class App extends React.Component {
     this.attachAnalyser = this.attachAnalyser.bind(this);
     this.howlLoaded = this.howlLoaded.bind(this);
     this.refreshData = this.refreshData.bind(this);
+    this.getAddUrl = this.getAddUrl.bind(this);
   }
 
   howlLoaded() {
@@ -70,8 +71,10 @@ class App extends React.Component {
 
       this.setState({ presetsData: undefined });
       this.setState({ soundsData: undefined });
+
+      let projectData = await (async () => await (await fetch(`${serverBaseUrl}projects/${this.state.selectedProject.id}`)).json())();
       this.setState({
-        spritesData: this.state.projectsData.find(x => x.id === this.state.selectedProject.id).sprites
+        spritesData: projectData.sprites
       });
     }
     if (menuEntity === "sprites") {
@@ -149,6 +152,9 @@ class App extends React.Component {
     if (menuEntity === "projects") {
       this.setState({ projectsData: data });
     }
+    if (menuEntity === "sprites") {
+      this.setState({ spritesData: data });
+    }
   }
 
   unloadPresetPlayer(callback) {
@@ -156,6 +162,15 @@ class App extends React.Component {
       this.presetPlayer.unload(() => callback());
     } else {
       callback();
+    }
+  }
+
+  async getAddUrl(menuEntity, addText) {
+    if (menuEntity === "projects") {
+      return `${serverBaseUrl}${menuEntity}?projectId=${addText}`;
+    }
+    if (menuEntity === "sprites") {
+      return `${serverBaseUrl}${menuEntity}?projectId=${this.state.selectedProject.id}&spriteId=${addText}`;
     }
   }
 
@@ -177,6 +192,7 @@ class App extends React.Component {
           data={this.state.projectsData}
           menuItemClicked={this.menuItemClicked}
           menuType="create-directory"
+          getAddUrl={this.getAddUrl}
           refreshData={this.refreshData}
         />
       );
@@ -193,6 +209,8 @@ class App extends React.Component {
           menuItemClicked={this.menuItemClicked}
           showMenu={this.showProjectsMenu}
           menuType="create-directory"
+          getAddUrl={this.getAddUrl}
+          refreshData={this.refreshData}
         />
       );
     }
@@ -225,6 +243,7 @@ class App extends React.Component {
           menuItemClicked={this.menuItemClicked}
           showMenu={this.showSoundsMenu}
           menuType="create-directory"
+          getAddUrl={this.getAddUrl}
         />
       );
     }
@@ -241,6 +260,7 @@ class App extends React.Component {
           menuItemClicked={this.menuItemClicked}
           showMenu={this.showPresetsMenu}
           menuType="create-directory"
+          getAddUrl={this.getAddUrl}
         />
       );
     }

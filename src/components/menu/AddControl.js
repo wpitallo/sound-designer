@@ -27,8 +27,8 @@ export default class AddControl extends React.Component {
   };
 
   onClickHandler = async e => {
-    const result = await axios.post(`${this.props.serverBaseUrl}${this.props.menuEntity}?id=${this.state.addText}`);
-    debugger;
+    let url = await this.props.getAddUrl(this.props.menuEntity, this.state.addText);
+    const result = await axios.post(url);
     if (result.data.status === "ok") {
       this.props.refreshData(this.props.menuEntity, result.data.message);
     } else {
