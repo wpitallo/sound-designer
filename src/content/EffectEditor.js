@@ -17,10 +17,7 @@ export default class EffectEditor extends React.Component {
   }
 
   componentDidMount() {
-    this.waveVisualizer.updateRegion(
-      this.state.selectedEffect.effectData.startTime,
-      this.state.selectedEffect.effectData.endTime
-    );
+    this.waveVisualizer.updateRegion(this.state.selectedEffect.effectData.startTime, this.state.selectedEffect.effectData.endTime);
 
     this.props.howlController.elapsedUpdate = elapsedTime => {
       this.setState({ elapsedTime: elapsedTime });
@@ -35,10 +32,7 @@ export default class EffectEditor extends React.Component {
       this.selectedEffect.effectData.startTime = e.value;
     }
     this.setState({ selectedEffect: this.selectedEffect });
-    this.waveVisualizer.updateRegion(
-      this.selectedEffect.effectData.startTime,
-      this.selectedEffect.effectData.endTime
-    );
+    this.waveVisualizer.updateRegion(this.selectedEffect.effectData.startTime, this.selectedEffect.effectData.endTime);
   }
 
   endTimeChanged(e) {
@@ -49,10 +43,7 @@ export default class EffectEditor extends React.Component {
       this.selectedEffect.effectData.endTime = e.value;
     }
     this.setState({ selectedEffect: this.selectedEffect });
-    this.waveVisualizer.updateRegion(
-      this.selectedEffect.effectData.startTime,
-      this.selectedEffect.effectData.endTime
-    );
+    this.waveVisualizer.updateRegion(this.selectedEffect.effectData.startTime, this.selectedEffect.effectData.endTime);
   }
 
   render() {
@@ -81,7 +72,7 @@ export default class EffectEditor extends React.Component {
               selectedSound={this.props.selectedSound}
               selectedEffect={this.state.selectedEffect}
               howlController={this.props.howlController}
-              src={this.props.selectedSound.src}
+              src={this.props.soundsBaseUrl + this.props.selectedSound.src}
               onRef={ref => (this.waveVisualizer = ref)}
             />
           </div>

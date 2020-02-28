@@ -17,7 +17,15 @@ export default class Upload extends React.Component {
     this.onSelectedFilesChanged = this.onSelectedFilesChanged.bind(this);
     this.onAcceptChanged = this.onAcceptChanged.bind(this);
     this.onUploadModeChanged = this.onUploadModeChanged.bind(this);
-    this.onMultipleChanged = this.onMultipleChanged.bind(this);
+    this.uploaded = this.uploaded.bind(this);
+  }
+
+  uploaded(e) {
+    debugger;
+    let result = JSON.parse(e.request.response);
+    if (result.status === "ok") {
+      this.props.refreshData("sounds", result.message);
+    }
   }
 
   render() {
@@ -32,7 +40,12 @@ export default class Upload extends React.Component {
             multiple={true}
             accept="audio/*"
             uploadMode={this.state.uploadMode}
+            onUploaded={this.uploaded}
             uploadUrl={uploadUrl}
+            uploadHeaders={{
+              "Access-Control-Allow-Headers": "*",
+              "Access-Control-Allow-Origin": "*"
+            }}
             onValueChanged={this.onSelectedFilesChanged}
           />
           <div className="content" style={{ display: this.state.selectedFiles.length > 0 ? "block" : "none" }}>

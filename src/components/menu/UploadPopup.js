@@ -34,7 +34,12 @@ export default class UploadPopup extends React.Component {
           width={800}
           height={600}
         >
-          <Upload serverBaseUrl={this.props.serverBaseUrl} selectedProject={this.props.selectedProject} selectedSprite={this.props.selectedSprite} />
+          <Upload
+            serverBaseUrl={this.props.serverBaseUrl}
+            selectedProject={this.props.selectedProject}
+            selectedSprite={this.props.selectedSprite}
+            refreshData={this.props.refreshData}
+          />
         </Popup>
       </div>
     );
@@ -42,14 +47,12 @@ export default class UploadPopup extends React.Component {
 
   showInfo(employee) {
     this.setState({
-      currentEmployee: employee,
       popupVisible: true
     });
   }
 
   hideInfo() {
     this.setState({
-      currentEmployee: {},
       popupVisible: false
     });
   }

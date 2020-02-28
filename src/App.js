@@ -12,6 +12,7 @@ import HowlController from "./components/howlController/HowlController.js";
 import "./background.js";
 
 let serverBaseUrl = "https://w97sc.sse.codesandbox.io/";
+let soundsBaseUrl = "https://w97sc.sse.codesandbox.io/sound-files";
 
 class App extends React.Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class App extends React.Component {
       selectedPreset: undefined,
       presetsData: undefined,
       selectedEffect: undefined,
-      effectData: undefined,
+      effectsData: undefined,
       width: "250px",
       opacity: 1
     };
@@ -40,6 +41,7 @@ class App extends React.Component {
     this.howlLoaded = this.howlLoaded.bind(this);
     this.refreshData = this.refreshData.bind(this);
     this.getAddUrl = this.getAddUrl.bind(this);
+    this.addPresetDefault = this.addPresetDefault.bind(this);
   }
 
   howlLoaded() {
@@ -53,6 +55,20 @@ class App extends React.Component {
     //this.threeVisualizer.attachAnalyser();
   }
 
+  addPresetDefault(data) {
+    let foundDefault = data.find(x => x.name === "Default");
+    if (!foundDefault) {
+      data.push({
+        id: "DEFAULT",
+        order: 0,
+        name: "Default",
+        effects: []
+      });
+      data.sort((a, b) => a.order - b.order);
+    }
+    return data;
+  }
+
   attachAnalyser(analyser, audioContext) {
     this.threeVisualizer.attachAnalyser(analyser);
     //this.backgroundVisualizer.attachAnalyser(analyser, audioContext);
@@ -63,7 +79,7 @@ class App extends React.Component {
       if (this.spritesMenu) this.spritesMenu.clearSelection();
 
       this.setState({ selectedEffect: undefined });
-      this.setState({ effectData: undefined });
+      this.setState({ effectsData: undefined });
       this.setState({ selectedPreset: undefined });
       this.setState({ selectedSound: undefined });
       this.setState({ selectedSprite: undefined });
@@ -87,7 +103,7 @@ class App extends React.Component {
       // }
 
       this.setState({ selectedEffect: undefined });
-      this.setState({ effectData: undefined });
+      this.setState({ effectsData: undefined });
       this.setState({ selectedPreset: undefined });
       this.setState({ selectedSound: undefined });
       this.setState({ selectedSprite: menuItem });
@@ -103,24 +119,13 @@ class App extends React.Component {
 
       this.setState({ selectedSound: menuItem });
 
-      this.howlController.unload();
-      this.howlController.load(this.state.selectedSound.src, this.howlLoaded);
+      this.howlController.load(soundsBaseUrl + this.state.selectedSound.src, this.howlLoaded);
 
       let data = this.state.soundsData.find(x => x.id === this.state.selectedSound.id).presets;
-
-      let foundDefault = data.find(x => x.name === "Default");
-      if (!foundDefault) {
-        data.push({
-          id: "DEFAULT",
-          order: 0,
-          name: "Default",
-          effects: []
-        });
-        data.sort((a, b) => a.order - b.order);
-      }
+      data = this.addPresetDefault(data);
 
       this.setState({ selectedEffect: undefined });
-      this.setState({ effectData: undefined });
+      this.setState({ effectsData: undefined });
 
       this.setState({ selectedPreset: undefined });
       this.setState({ selectedSound: menuItem });
@@ -133,16 +138,16 @@ class App extends React.Component {
       this.setState({ selectedEffect: undefined });
       this.setState({ selectedPreset: menuItem });
       this.setState({
-        effectData: this.state.presetsData.find(x => x.id === this.state.selectedPreset.id).effects
+        effectsData: this.state.presetsData.find(x => x.id === this.state.selectedPreset.id).effects
       });
     }
 
     if (menuEntity === "effects") {
-      if (!menuItem.effectData) {
-        menuItem.effectData = {};
-        menuItem.effectData.startTime = 0;
-        menuItem.effectData.endTime = this.state.selectedSound.soundDuration;
-        menuItem.effectData.soundDuration = this.state.selectedSound.soundDuration;
+      if (!menuItem.effectsData) {
+        menuItem.effectsData = {};
+        menuItem.effectsData.startTime = 0;
+        menuItem.effectsData.endTime = this.state.selectedSound.soundDuration;
+        menuItem.effectsData.soundDuration = this.state.selectedSound.soundDuration;
       }
       this.setState({ selectedEffect: menuItem });
     }
@@ -154,6 +159,16 @@ class App extends React.Component {
     }
     if (menuEntity === "sprites") {
       this.setState({ spritesData: data });
+    }
+    if (menuEntity === "sounds") {
+      this.setState({ soundsData: data });
+    }
+    if (menuEntity === "presets") {
+      data = this.addPresetDefault(data);
+      this.setState({ presetsData: data });
+    }
+    if (menuEntity === "effects") {
+      this.setState({ effectsData: data });
     }
   }
 
@@ -171,6 +186,16 @@ class App extends React.Component {
     }
     if (menuEntity === "sprites") {
       return `${serverBaseUrl}${menuEntity}?projectId=${this.state.selectedProject.id}&spriteId=${addText}`;
+    }
+    if (menuEntity === "presets") {
+      return `${serverBaseUrl}${menuEntity}?projectId=${this.state.selectedProject.id}&spriteId=${this.state.selectedSprite.id}&soundId=${
+        this.state.selectedSound.id
+      }&presetId=${addText}`;
+    }
+    if (menuEntity === "effects") {
+      return `${serverBaseUrl}${menuEntity}?projectId=${this.state.selectedProject.id}&spriteId=${this.state.selectedSprite.id}&soundId=${
+        this.state.selectedSound.id
+      }&presetId=${this.state.selectedPreset.id}&effectId=${addText}`;
     }
   }
 
@@ -228,6 +253,7 @@ class App extends React.Component {
           menuItemClicked={this.menuItemClicked}
           showMenu={this.showSpritesMenu}
           menuType="multiple-files"
+          refreshData={this.refreshData}
         />
       );
     }
@@ -244,23 +270,25 @@ class App extends React.Component {
           showMenu={this.showSoundsMenu}
           menuType="create-directory"
           getAddUrl={this.getAddUrl}
+          refreshData={this.refreshData}
         />
       );
     }
 
     let effectsMenu;
-    if (this.state.effectData) {
+    if (this.state.effectsData) {
       effectsMenu = (
         <Menu
           serverBaseUrl={serverBaseUrl}
           menuEntity="effects"
           parentName={this.state.selectedPreset.name}
           onRef={ref => (this.effectsMenu = ref)}
-          data={this.state.effectData}
+          data={this.state.effectsData}
           menuItemClicked={this.menuItemClicked}
           showMenu={this.showPresetsMenu}
           menuType="create-directory"
           getAddUrl={this.getAddUrl}
+          refreshData={this.refreshData}
         />
       );
     }
@@ -268,6 +296,7 @@ class App extends React.Component {
     if (this.state.selectedPreset && !this.state.selectedEffect) {
       mainContent = (
         <PresetPlayer
+          soundsBaseUrl={soundsBaseUrl}
           howlController={this.howlController}
           selectedPreset={this.state.selectedPreset}
           selectedSound={this.state.selectedSound}
@@ -278,6 +307,7 @@ class App extends React.Component {
     if (this.state.selectedEffect) {
       mainContent = (
         <EffectEditor
+          soundsBaseUrl={soundsBaseUrl}
           howlController={this.howlController}
           selectedEffect={this.state.selectedEffect}
           selectedSound={this.state.selectedSound}

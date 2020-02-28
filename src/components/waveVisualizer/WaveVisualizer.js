@@ -101,8 +101,7 @@ export default class WaveVisualizer extends React.Component {
         this.wavesurfer = WaveSurfer.create({
           container: "#" + this.waveFormId,
           waveColor: "#28fc03",
-          audioContext: this.props.howlController.howler.ctx.destination
-            .context,
+          audioContext: this.props.howlController.howler.ctx.destination.context,
           // backend: "MediaElement",
           splitChannels: true,
           responsive: true,
@@ -122,18 +121,30 @@ export default class WaveVisualizer extends React.Component {
         this.wavesurfer = WaveSurfer.create({
           container: "#" + this.waveFormId,
           waveColor: "#28fc03",
-          audioContext: this.props.howlController.howler.ctx.destination
-            .context,
+          audioContext: this.props.howlController.howler.ctx.destination.context,
           // backend: "MediaElement",
           splitChannels: true,
           responsive: true,
           barWidth: 2,
           barHeight: 1, // the height of the wave
-          barGap: null
+          barGap: null,
+          xhr: {
+            cache: "default",
+            mode: "cors",
+            method: "GET",
+            credentials: "include",
+            headers: [
+              { key: "cache-control", value: "no-cache" },
+              {
+                key: "Access-Control-Allow-Headers",
+                value: "*"
+              },
+              { key: "Access-Control-Allow-Origin", value: "*" }
+            ]
+          }
         });
       }
       //this.wavesurfer.load("/sounds/summarySounds.mp3");
-
       this.wavesurfer.load(this.props.src);
       //this.wavesurfer.regions = RegionsPlugin;
       //this.wavesurfer.backend.params.audioContext = this.props.howlController.howler.ctx.destination.context;
@@ -156,9 +167,7 @@ export default class WaveVisualizer extends React.Component {
 
       this.wavesurfer.on("seek", progress => {
         console.log(progress);
-        this.props.howlController.seek(
-          progress * this.props.selectedSound.soundDuration
-        );
+        this.props.howlController.seek(progress * this.props.selectedSound.soundDuration);
       });
 
       this.wavesurfer.on("waveform-ready", () => {
@@ -237,10 +246,7 @@ export default class WaveVisualizer extends React.Component {
 
     return (
       <div className="flex-container-column">
-        <div
-          className="flex-item no-border"
-          style={{ paddingLeft: "2px", height: "255px" }}
-        >
+        <div className="flex-item no-border" style={{ paddingLeft: "2px", height: "255px" }}>
           <div align="centre" style={labelStyle}>
             {soundDuration}
           </div>
@@ -251,8 +257,7 @@ export default class WaveVisualizer extends React.Component {
         <div className="flex-item" style={{ height: "61px" }}>
           <div align="center">
             <div align="centre" style={labelStyle2}>
-              {this.props.elapsedTime.toFixed(2)} elapsed
-              &nbsp;&nbsp;&nbsp;&nbsp; remaining {remaining}
+              {this.props.elapsedTime.toFixed(2)} elapsed &nbsp;&nbsp;&nbsp;&nbsp; remaining {remaining}
             </div>
             {/* <label style={{ position: "absolute", marginTop: "-30px" }}>
               {this.props.waveLabel}

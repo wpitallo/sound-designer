@@ -43,9 +43,7 @@ export default class HowlController {
 
     this.sound.once("load", () => {
       this.soundDuration = this.sound.duration();
-      this.formattedSoundDuration = this.formatTime(
-        Math.round(this.sound.duration())
-      );
+      this.formattedSoundDuration = this.formatTime(Math.round(this.sound.duration()));
       this.elapsed = 0;
       this.analyser = Howler.ctx.createAnalyser();
       Howler.masterGain.connect(this.analyser);

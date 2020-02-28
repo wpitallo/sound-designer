@@ -27,14 +27,18 @@ export default class AddControl extends React.Component {
   };
 
   onClickHandler = async e => {
-    let url = await this.props.getAddUrl(this.props.menuEntity, this.state.addText);
-    const result = await axios.post(url);
-    if (result.data.status === "ok") {
-      this.props.refreshData(this.props.menuEntity, result.data.message);
-    } else {
-      this.setState({ notificationVisible: true });
-      this.setState({ notificationTitle: `Add ${this.props.menuEntity} error` });
-      this.setState({ notificationMessage: result.data.message });
+    if (this.state.addText !== undefined) {
+      if (this.state.addText.trim() !== "") {
+        let url = await this.props.getAddUrl(this.props.menuEntity, this.state.addText);
+        const result = await axios.post(url);
+        if (result.data.status === "ok") {
+          this.props.refreshData(this.props.menuEntity, result.data.message);
+        } else {
+          this.setState({ notificationVisible: true });
+          this.setState({ notificationTitle: `Add ${this.props.menuEntity} error` });
+          this.setState({ notificationMessage: result.data.message });
+        }
+      }
     }
   };
 
@@ -64,6 +68,7 @@ export default class AddControl extends React.Component {
           serverBaseUrl={this.props.serverBaseUrl}
           selectedProject={this.props.selectedProject}
           selectedSprite={this.props.selectedSprite}
+          refreshData={this.props.refreshData}
         />
       );
     }

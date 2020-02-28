@@ -42,7 +42,7 @@ export default class PresetPlayer extends React.Component {
               selectedSound={this.props.selectedSound}
               selectedEffect={this.state.selectedEffect}
               howlController={this.props.howlController}
-              src={this.props.selectedSound.src}
+              src={this.props.soundsBaseUrl + this.props.selectedSound.src}
               onRef={ref => (this.waveVisualizer = ref)}
             />
           </div>
@@ -53,9 +53,7 @@ export default class PresetPlayer extends React.Component {
               // backgroundColor: "red"
             }}
           >
-            <div className="flex-container-row">
-              {/* <AudioAdjustmentRow /> */}
-            </div>
+            <div className="flex-container-row">{/* <AudioAdjustmentRow /> */}</div>
           </div>
         </div>
       );
