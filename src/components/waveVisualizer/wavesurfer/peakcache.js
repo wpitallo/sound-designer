@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Caches the decoded peaks data to improve rendering speed for large audio
  *
@@ -77,7 +78,8 @@ export default class PeakCache {
         uncachedRanges = uncachedRanges.filter((item, pos, arr) => {
             if (pos == 0) {
                 return item != arr[pos + 1];
-            } else if (pos == arr.length - 1) {
+            }
+            else if (pos == arr.length - 1) {
                 return item != arr[pos - 1];
             }
             return item != arr[pos - 1] && item != arr[pos + 1];
@@ -92,7 +94,8 @@ export default class PeakCache {
             .filter((item, pos, arr) => {
                 if (pos == 0) {
                     return item != arr[pos + 1];
-                } else if (pos == arr.length - 1) {
+                }
+                else if (pos == arr.length - 1) {
                     return item != arr[pos - 1];
                 }
                 return item != arr[pos - 1] && item != arr[pos + 1];

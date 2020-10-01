@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import * as THREE from "three";
 
 let p = [
@@ -126,6 +128,7 @@ scene.add(l5);
 
 var pct = 0;
 var pct2 = 0;
+
 function render() {
   pct += cameraSpeed;
   pct2 += lightSpeed;

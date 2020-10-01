@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import * as util from "./util";
 import MultiCanvas from "./drawer.multicanvas";
 import WebAudio from "./webaudio";
@@ -253,8 +255,7 @@ export default class WaveSurfer extends util.Observer {
     minPxPerSec: 20,
     normalize: false,
     partialRender: false,
-    pixelRatio:
-      window.devicePixelRatio || screen.deviceXDPI / screen.logicalXDPI,
+    pixelRatio: window.devicePixelRatio || screen.deviceXDPI / screen.logicalXDPI,
     plugins: [],
     progressColor: "#555",
     removeMediaElementOnDestroy: true,
@@ -336,9 +337,9 @@ export default class WaveSurfer extends util.Observer {
 
     /** @private */
     this.container =
-      "string" == typeof params.container
-        ? document.querySelector(this.params.container)
-        : this.params.container;
+      "string" == typeof params.container ?
+      document.querySelector(this.params.container) :
+      this.params.container;
 
     if (!this.container) {
       throw new Error("Container element not found");
@@ -347,10 +348,12 @@ export default class WaveSurfer extends util.Observer {
     if (this.params.mediaContainer == null) {
       /** @private */
       this.mediaContainer = this.container;
-    } else if (typeof this.params.mediaContainer == "string") {
+    }
+    else if (typeof this.params.mediaContainer == "string") {
       /** @private */
       this.mediaContainer = document.querySelector(this.params.mediaContainer);
-    } else {
+    }
+    else {
       /** @private */
       this.mediaContainer = this.params.mediaContainer;
     }
@@ -361,7 +364,8 @@ export default class WaveSurfer extends util.Observer {
 
     if (this.params.maxCanvasWidth <= 1) {
       throw new Error("maxCanvasWidth must be greater than 1");
-    } else if (this.params.maxCanvasWidth % 2 == 1) {
+    }
+    else if (this.params.maxCanvasWidth % 2 == 1) {
       throw new Error("maxCanvasWidth must be an even number");
     }
 
@@ -751,7 +755,8 @@ export default class WaveSurfer extends util.Observer {
   setCurrentTime(seconds) {
     if (seconds >= this.getDuration()) {
       this.seekTo(1);
-    } else {
+    }
+    else {
       this.seekTo(seconds / this.getDuration());
     }
   }
@@ -1010,7 +1015,8 @@ export default class WaveSurfer extends util.Observer {
       this.backend.setVolume(0);
       this.isMuted = true;
       this.fireEvent("volume", 0);
-    } else {
+    }
+    else {
       // If currently muted then restore to the saved volume
       // and update the mute properties
       this.backend.setVolume(this.savedVolume);
@@ -1196,7 +1202,8 @@ export default class WaveSurfer extends util.Observer {
         peaks = this.backend.getPeaks(width, newRanges[i][0], newRanges[i][1]);
         this.drawer.drawPeaks(peaks, width, newRanges[i][0], newRanges[i][1]);
       }
-    } else {
+    }
+    else {
       peaks = this.backend.getPeaks(width, start, end);
       this.drawer.drawPeaks(peaks, width, start, end);
     }
@@ -1217,7 +1224,8 @@ export default class WaveSurfer extends util.Observer {
     if (!pxPerSec) {
       this.params.minPxPerSec = this.defaultParams.minPxPerSec;
       this.params.scrollParent = false;
-    } else {
+    }
+    else {
       this.params.minPxPerSec = pxPerSec;
       this.params.scrollParent = true;
     }
@@ -1311,13 +1319,11 @@ export default class WaveSurfer extends util.Observer {
       // check whether the preload attribute will be usable and if not log
       // a warning listing the reasons why not and nullify the variable
       const preloadIgnoreReasons = {
-        "Preload is not 'auto', 'none' or 'metadata'":
-          ["auto", "metadata", "none"].indexOf(preload) === -1,
+        "Preload is not 'auto', 'none' or 'metadata'": ["auto", "metadata", "none"].indexOf(preload) === -1,
         "Peaks are not provided": !peaks,
-        "Backend is not of type 'MediaElement' or 'MediaElementWebAudio'":
-          ["MediaElement", "MediaElementWebAudio"].indexOf(
-            this.params.backend
-          ) === -1,
+        "Backend is not of type 'MediaElement' or 'MediaElementWebAudio'": ["MediaElement", "MediaElementWebAudio"].indexOf(
+          this.params.backend
+        ) === -1,
         "Url is not of type string": typeof url !== "string"
       };
       const activeReasons = Object.keys(preloadIgnoreReasons).filter(
@@ -1327,7 +1333,7 @@ export default class WaveSurfer extends util.Observer {
         // eslint-disable-next-line no-console
         console.warn(
           "Preload parameter of wavesurfer.load will be ignored because:\n\t- " +
-            activeReasons.join("\n\t- ")
+          activeReasons.join("\n\t- ")
         );
         // stop invalid values from being used
         preload = null;
@@ -1364,7 +1370,8 @@ export default class WaveSurfer extends util.Observer {
       this.backend.setPeaks(peaks, duration);
       this.drawBuffer();
       this.tmpEvents.push(this.once("interaction", load));
-    } else {
+    }
+    else {
       return load();
     }
   }
@@ -1386,7 +1393,8 @@ export default class WaveSurfer extends util.Observer {
 
     if (typeof urlOrElt === "string") {
       this.backend.load(url, this.mediaContainer, peaks, preload);
-    } else {
+    }
+    else {
       const elt = urlOrElt;
       this.backend.loadElt(elt, peaks);
 
@@ -1461,8 +1469,7 @@ export default class WaveSurfer extends util.Observer {
    * @private
    */
   getArrayBuffer(url, callback) {
-    let options = Object.assign(
-      {
+    let options = Object.assign({
         url: url,
         responseType: "arraybuffer"
       },
@@ -1500,7 +1507,8 @@ export default class WaveSurfer extends util.Observer {
     let percentComplete;
     if (e.lengthComputable) {
       percentComplete = e.loaded / e.total;
-    } else {
+    }
+    else {
       // Approximate progress with an asymptotic
       // function, and assume downloads in the 1-3 MB range.
       percentComplete = e.loaded / (e.loaded + 1000000);

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from "react";
 import "./visualizer.css";
 
@@ -143,8 +145,8 @@ export default class ThreeVisualizer extends React.Component {
           vertex.y + time * rf * 8,
           vertex.z + time * rf * 9
         ) *
-          amp *
-          treFr;
+        amp *
+        treFr;
       vertex.multiplyScalar(distance);
     });
     mesh.geometry.verticesNeedUpdate = true;

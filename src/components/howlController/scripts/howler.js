@@ -35,9 +35,9 @@
       self._volume = 1;
       self._canPlayEvent = "canplaythrough";
       self._navigator =
-        typeof window !== "undefined" && window.navigator
-          ? window.navigator
-          : null;
+        typeof window !== "undefined" && window.navigator ?
+        window.navigator :
+        null;
 
       // Public properties.
       self.masterGain = null;
@@ -232,10 +232,12 @@
             if (typeof test.oncanplaythrough === "undefined") {
               self._canPlayEvent = "canplay";
             }
-          } catch (e) {
+          }
+          catch (e) {
             self.noAudio = true;
           }
-        } else {
+        }
+        else {
           self.noAudio = true;
         }
       }
@@ -246,7 +248,8 @@
         if (test.muted) {
           self.noAudio = true;
         }
-      } catch (e) {}
+      }
+      catch (e) {}
 
       // Check for supported codecs.
       if (!self.noAudio) {
@@ -267,7 +270,8 @@
       // Must wrap in a try/catch because IE11 in server mode throws an error.
       try {
         audioTest = typeof Audio !== "undefined" ? new Audio() : null;
-      } catch (err) {
+      }
+      catch (err) {
         return self;
       }
 
@@ -284,8 +288,7 @@
         checkOpera && parseInt(checkOpera[0].split("/")[1], 10) < 33;
 
       self._codecs = {
-        mp3: !!(
-          !isOldOpera &&
+        mp3: !!(!isOldOpera &&
           (mpegTest || audioTest.canPlayType("audio/mp3;").replace(/^no$/, ""))
         ),
         mpeg: !!mpegTest,
@@ -378,7 +381,8 @@
         // Play the empty buffer.
         if (typeof source.start === "undefined") {
           source.noteOn(0);
-        } else {
+        }
+        else {
           source.start(0);
         }
 
@@ -422,8 +426,7 @@
     _autoSuspend: function() {
       var self = this;
 
-      if (
-        !self.autoSuspend ||
+      if (!self.autoSuspend ||
         !self.ctx ||
         typeof self.ctx.suspend === "undefined" ||
         !Howler.usingWebAudio
@@ -474,8 +477,7 @@
     _autoResume: function() {
       var self = this;
 
-      if (
-        !self.ctx ||
+      if (!self.ctx ||
         typeof self.ctx.resume === "undefined" ||
         !Howler.usingWebAudio
       ) {
@@ -485,7 +487,8 @@
       if (self.state === "running" && self._suspendTimer) {
         clearTimeout(self._suspendTimer);
         self._suspendTimer = null;
-      } else if (self.state === "suspended") {
+      }
+      else if (self.state === "suspended") {
         self.ctx.resume().then(function() {
           self.state = "running";
 
@@ -499,7 +502,8 @@
           clearTimeout(self._suspendTimer);
           self._suspendTimer = null;
         }
-      } else if (self.state === "suspending") {
+      }
+      else if (self.state === "suspending") {
         self._resumeAfterSuspend = true;
       }
 
@@ -661,7 +665,8 @@
         if (self._format && self._format[i]) {
           // If an extension was specified, use that instead.
           ext = self._format[i];
-        } else {
+        }
+        else {
           // Make sure the source is a string.
           str = self._src[i];
           if (typeof str !== "string") {
@@ -676,7 +681,8 @@
           // Extract the file extension from the URL or base64 data URI.
           if (self._contenttype) {
             ext = self._contenttype.split("/")[1];
-          } else {
+          }
+          else {
             ext = /^data:audio\/([^;,]+);/i.exec(str);
           }
           if (!ext) {
@@ -749,14 +755,16 @@
       if (typeof sprite === "number") {
         id = sprite;
         sprite = null;
-      } else if (
+      }
+      else if (
         typeof sprite === "string" &&
         self._state === "loaded" &&
         !self._sprite[sprite]
       ) {
         // If the passed sprite doesn't exist, do nothing.
         return null;
-      } else if (typeof sprite === "undefined") {
+      }
+      else if (typeof sprite === "undefined") {
         // Use the default sound sprite (plays the full audio length).
         sprite = "__default";
 
@@ -772,7 +780,8 @@
 
         if (num === 1) {
           sprite = null;
-        } else {
+        }
+        else {
           id = null;
         }
       }
@@ -867,13 +876,14 @@
 
           // Play the sound using the supported method.
           if (typeof node.bufferSource.start === "undefined") {
-            sound._loop
-              ? node.bufferSource.noteGrainOn(0, seek, 86400)
-              : node.bufferSource.noteGrainOn(0, seek, duration);
-          } else {
-            sound._loop
-              ? node.bufferSource.start(0, seek, 86400)
-              : node.bufferSource.start(0, seek, duration);
+            sound._loop ?
+              node.bufferSource.noteGrainOn(0, seek, 86400) :
+              node.bufferSource.noteGrainOn(0, seek, duration);
+          }
+          else {
+            sound._loop ?
+              node.bufferSource.start(0, seek, 86400) :
+              node.bufferSource.start(0, seek, duration);
           }
 
           if (Howler.detectIE() == 11) {
@@ -898,13 +908,15 @@
 
         if (Howler.state === "running") {
           playWebAudio();
-        } else {
+        }
+        else {
           self.once("resume", playWebAudio);
 
           // Cancel the end timer.
           self._clearTimer(sound._id);
         }
-      } else {
+      }
+      else {
         // Fire this when the sound is ready to play to begin HTML5 Audio playback.
         var playHtml5 = function() {
           node.currentTime = seek;
@@ -940,10 +952,11 @@
                     "playerror",
                     sound._id,
                     "Playback was unable to start. This is most commonly an issue " +
-                      "on mobile devices and Chrome where playback was not within a user interaction."
+                    "on mobile devices and Chrome where playback was not within a user interaction."
                   );
                 });
-            } else if (!internal) {
+            }
+            else if (!internal) {
               self._emit("play", sound._id);
             }
 
@@ -956,7 +969,7 @@
                 "playerror",
                 sound._id,
                 "Playback was unable to start. This is most commonly an issue " +
-                  "on mobile devices and Chrome where playback was not within a user interaction."
+                "on mobile devices and Chrome where playback was not within a user interaction."
               );
               return;
             }
@@ -967,7 +980,8 @@
                 self._ended.bind(self, sound),
                 timeout
               );
-            } else {
+            }
+            else {
               self._endTimers[sound._id] = function() {
                 // Fire ended on this audio node.
                 self._ended(sound);
@@ -981,7 +995,8 @@
               };
               node.addEventListener("ended", self._endTimers[sound._id], false);
             }
-          } catch (err) {
+          }
+          catch (err) {
             self._emit("playerror", sound._id, err);
           }
         };
@@ -992,7 +1007,8 @@
           (!node.readyState && Howler._navigator.isCocoonJS);
         if (node.readyState >= 3 || loadedNoReadyState) {
           playHtml5();
-        } else {
+        }
+        else {
           var listener = function() {
             // Begin playback.
             playHtml5();
@@ -1058,14 +1074,15 @@
 
               if (typeof sound._node.bufferSource.stop === "undefined") {
                 sound._node.bufferSource.noteOff(0);
-              } else {
+              }
+              else {
                 sound._node.bufferSource.stop(0);
               }
 
               // Clean up the buffer source.
               self._cleanBuffer(sound._node);
-            } else if (
-              !isNaN(sound._node.duration) ||
+            }
+            else if (!isNaN(sound._node.duration) ||
               sound._node.duration === Infinity
             ) {
               sound._node.pause();
@@ -1129,15 +1146,16 @@
               if (sound._node.bufferSource) {
                 if (typeof sound._node.bufferSource.stop === "undefined") {
                   sound._node.bufferSource.noteOff(0);
-                } else {
+                }
+                else {
                   sound._node.bufferSource.stop(0);
                 }
 
                 // Clean up the buffer source.
                 self._cleanBuffer(sound._node);
               }
-            } else if (
-              !isNaN(sound._node.duration) ||
+            }
+            else if (!isNaN(sound._node.duration) ||
               sound._node.duration === Infinity
             ) {
               sound._node.currentTime = sound._start || 0;
@@ -1179,7 +1197,8 @@
       if (typeof id === "undefined") {
         if (typeof muted === "boolean") {
           self._muted = muted;
-        } else {
+        }
+        else {
           return self._muted;
         }
       }
@@ -1204,7 +1223,8 @@
               muted ? 0 : sound._volume,
               Howler.ctx.currentTime
             );
-          } else if (sound._node) {
+          }
+          else if (sound._node) {
             sound._node.muted = Howler._muted ? true : muted;
           }
 
@@ -1232,7 +1252,8 @@
       if (args.length === 0) {
         // Return the value of the groups' volume.
         return self._volume;
-      } else if (
+      }
+      else if (
         args.length === 1 ||
         (args.length === 2 && typeof args[1] === "undefined")
       ) {
@@ -1241,10 +1262,12 @@
         var index = ids.indexOf(args[0]);
         if (index >= 0) {
           id = parseInt(args[0], 10);
-        } else {
+        }
+        else {
           vol = parseFloat(args[0]);
         }
-      } else if (args.length >= 2) {
+      }
+      else if (args.length >= 2) {
         vol = parseFloat(args[0]);
         id = parseInt(args[1], 10);
       }
@@ -1285,14 +1308,16 @@
 
             if (self._webAudio && sound._node && !sound._muted) {
               sound._node.gain.setValueAtTime(vol, Howler.ctx.currentTime);
-            } else if (sound._node && !sound._muted) {
+            }
+            else if (sound._node && !sound._muted) {
               sound._node.volume = vol * Howler.volume();
             }
 
             self._emit("volume", sound._id);
           }
         }
-      } else {
+      }
+      else {
         sound = id ? self._soundById(id) : self._sounds[0];
         return sound ? sound._volume : 0;
       }
@@ -1399,7 +1424,8 @@
         // Change the volume.
         if (self._webAudio) {
           sound._volume = vol;
-        } else {
+        }
+        else {
           self.volume(vol, sound._id, true);
         }
 
@@ -1461,16 +1487,19 @@
       if (args.length === 0) {
         // Return the grou's loop value.
         return self._loop;
-      } else if (args.length === 1) {
+      }
+      else if (args.length === 1) {
         if (typeof args[0] === "boolean") {
           loop = args[0];
           self._loop = loop;
-        } else {
+        }
+        else {
           // Return this sound's loop value.
           sound = self._soundById(parseInt(args[0], 10));
           return sound ? sound._loop : false;
         }
-      } else if (args.length === 2) {
+      }
+      else if (args.length === 2) {
         loop = args[0];
         id = parseInt(args[1], 10);
       }
@@ -1512,16 +1541,19 @@
       if (args.length === 0) {
         // We will simply return the current rate of the first node.
         id = self._sounds[0]._id;
-      } else if (args.length === 1) {
+      }
+      else if (args.length === 1) {
         // First check if this is an ID, and if not, assume it is a new rate value.
         var ids = self._getSoundIds();
         var index = ids.indexOf(args[0]);
         if (index >= 0) {
           id = parseInt(args[0], 10);
-        } else {
+        }
+        else {
           rate = parseFloat(args[0]);
         }
-      } else if (args.length === 2) {
+      }
+      else if (args.length === 2) {
         rate = parseFloat(args[0]);
         id = parseInt(args[1], 10);
       }
@@ -1556,9 +1588,9 @@
             // Keep track of our position when the rate changed and update the playback
             // start position so we can properly adjust the seek position for time elapsed.
             sound._rateSeek = self.seek(id[i]);
-            sound._playStart = self._webAudio
-              ? Howler.ctx.currentTime
-              : sound._playStart;
+            sound._playStart = self._webAudio ?
+              Howler.ctx.currentTime :
+              sound._playStart;
             sound._rate = rate;
 
             // Change the playback rate.
@@ -1567,7 +1599,8 @@
                 rate,
                 Howler.ctx.currentTime
               );
-            } else if (sound._node) {
+            }
+            else if (sound._node) {
               sound._node.playbackRate = rate;
             }
 
@@ -1576,7 +1609,7 @@
             var duration =
               (self._sprite[sound._sprite][0] +
                 self._sprite[sound._sprite][1]) /
-                1000 -
+              1000 -
               seek;
             var timeout = (duration * 1000) / Math.abs(sound._rate);
 
@@ -1596,7 +1629,8 @@
             self._emit("rate", sound._id);
           }
         }
-      } else {
+      }
+      else {
         sound = self._soundById(id);
         return sound ? sound._rate : self._rate;
       }
@@ -1621,17 +1655,20 @@
       if (args.length === 0) {
         // We will simply return the current position of the first node.
         id = self._sounds[0]._id;
-      } else if (args.length === 1) {
+      }
+      else if (args.length === 1) {
         // First check if this is an ID, and if not, assume it is a new seek position.
         var ids = self._getSoundIds();
         var index = ids.indexOf(args[0]);
         if (index >= 0) {
           id = parseInt(args[0], 10);
-        } else if (self._sounds.length) {
+        }
+        else if (self._sounds.length) {
           id = self._sounds[0]._id;
           seek = parseFloat(args[0]);
         }
-      } else if (args.length === 2) {
+      }
+      else if (args.length === 2) {
         seek = parseFloat(args[0]);
         id = parseInt(args[1], 10);
       }
@@ -1685,7 +1722,8 @@
             sound._playStart = Howler.ctx.currentTime;
             if (typeof sound._node.bufferSource.start === "undefined") {
               sound._node.bufferSource.noteGrainOn(0, seek);
-            } else {
+            }
+            else {
               sound._node.bufferSource.start(0, seek);
             }
             if (oldbuffer) {
@@ -1722,22 +1760,26 @@
             var emitSeek = function() {
               if (!self._playLock) {
                 seekAndEmit();
-              } else {
+              }
+              else {
                 setTimeout(emitSeek, 0);
               }
             };
             setTimeout(emitSeek, 0);
-          } else {
+          }
+          else {
             seekAndEmit();
           }
-        } else {
+        }
+        else {
           if (self._webAudio) {
-            var realTime = self.playing(id)
-              ? Howler.ctx.currentTime - sound._playStart
-              : 0;
+            var realTime = self.playing(id) ?
+              Howler.ctx.currentTime - sound._playStart :
+              0;
             var rateSeek = sound._rateSeek ? sound._rateSeek - sound._seek : 0;
             return sound._seek + (rateSeek + realTime * Math.abs(sound._rate));
-          } else {
+          }
+          else {
             return sound._node.currentTime;
             // Workaround for IE11 reseting the rate
             if (Howler.detectIE() == 11) {
@@ -1922,10 +1964,12 @@
             break;
           }
         }
-      } else if (event) {
+      }
+      else if (event) {
         // Clear out all events of this type.
         self["_on" + event] = [];
-      } else {
+      }
+      else {
         // Clear out all events of every type.
         var keys = Object.keys(self);
         for (i = 0; i < keys.length; i++) {
@@ -2039,8 +2083,7 @@
       // If we are using IE and there was network latency we may be clipping
       // audio before it completes playing. Lets check the node to make sure it
       // believes it has completed, before ending the playback.
-      if (
-        !self._webAudio &&
+      if (!self._webAudio &&
         sound._node &&
         !sound._node.paused &&
         !sound._node.ended &&
@@ -2064,7 +2107,8 @@
           sound._sprite = sprite; // this line may be redundant
           self.stop(sound._id, true).play(sprite);
           self._emit("spritechange", sound);
-        } else {
+        }
+        else {
           self.stop(sound._id, true).play(sound._id);
         }
       }
@@ -2091,12 +2135,12 @@
         }
         console.log(
           "howler: end timer fired. playtime was " +
-            currpos +
-            "ms, expected " +
-            wanted +
-            "ms (" +
-            offset +
-            "ms off)"
+          currpos +
+          "ms, expected " +
+          wanted +
+          "ms (" +
+          offset +
+          "ms off)"
         );
         sound._rateSeek = 0;
         sound._playStart = Howler.ctx.currentTime;
@@ -2112,7 +2156,8 @@
           sound._loop = loop;
           sound._seek = sound._start || 0;
           self.seek(sound._seek, sound._id);
-        } else {
+        }
+        else {
           self._emit("play", sound._id);
           sound._seek = sound._start || 0;
           var timeout =
@@ -2159,7 +2204,8 @@
         // Clear the timeout or remove the ended listener.
         if (typeof self._endTimers[id] !== "function") {
           clearTimeout(self._endTimers[id]);
-        } else {
+        }
+        else {
           var sound = self._soundById(id);
           if (sound && sound._node) {
             sound._node.removeEventListener(
@@ -2269,7 +2315,8 @@
         }
 
         return ids;
-      } else {
+      }
+      else {
         return [id];
       }
     },
@@ -2289,7 +2336,8 @@
       // Connect to the correct node.
       if (sound._panner) {
         sound._node.bufferSource.connect(sound._panner);
-      } else {
+      }
+      else {
         sound._node.bufferSource.connect(sound._node);
       }
 
@@ -2320,7 +2368,8 @@
         node.bufferSource.disconnect(0);
         try {
           node.bufferSource.buffer = Howler._scratchBuffer;
-        } catch (e) {}
+        }
+        catch (e) {}
       }
       node.bufferSource = null;
 
@@ -2383,13 +2432,14 @@
       if (parent._webAudio) {
         // Create the gain node for controlling volume (the source will connect to this).
         self._node =
-          typeof Howler.ctx.createGain === "undefined"
-            ? Howler.ctx.createGainNode()
-            : Howler.ctx.createGain();
+          typeof Howler.ctx.createGain === "undefined" ?
+          Howler.ctx.createGainNode() :
+          Howler.ctx.createGain();
         self._node.gain.setValueAtTime(volume, Howler.ctx.currentTime);
         self._node.paused = true;
         self._node.connect(Howler.masterGain);
-      } else {
+      }
+      else {
         self._node = new Audio();
 
         // Listen for errors (http://dev.w3.org/html5/spec-author-view/spec.html#mediaerror).
@@ -2517,7 +2567,8 @@
       }
 
       decodeAudioData(dataView.buffer, self);
-    } else {
+    }
+    else {
       // Load the buffer from the URL.
       var xhr = new XMLHttpRequest();
       xhr.open("GET", url, true);
@@ -2558,7 +2609,8 @@
   var safeXhrSend = function(xhr) {
     try {
       xhr.send();
-    } catch (e) {
+    }
+    catch (e) {
       xhr.onerror();
     }
   };
@@ -2579,7 +2631,8 @@
       if (buffer && self._sounds.length > 0) {
         cache[self._src] = buffer;
         loadSound(self, buffer);
-      } else {
+      }
+      else {
         error();
       }
     };
@@ -2593,7 +2646,8 @@
         .decodeAudioData(arraybuffer.slice(0))
         .then(success)
         .catch(error);
-    } else {
+    }
+    else {
       Howler.ctx.decodeAudioData(arraybuffer.slice(0), success, error);
     }
   };
@@ -2631,12 +2685,15 @@
     try {
       if (typeof AudioContext !== "undefined") {
         Howler.ctx = new AudioContext();
-      } else if (typeof webkitAudioContext !== "undefined") {
+      }
+      else if (typeof webkitAudioContext !== "undefined") {
         Howler.ctx = new webkitAudioContext();
-      } else {
+      }
+      else {
         Howler.usingWebAudio = false;
       }
-    } catch (e) {
+    }
+    catch (e) {
       Howler.usingWebAudio = false;
     }
 
@@ -2664,9 +2721,9 @@
     // Create and expose the master GainNode when using Web Audio (useful for plugins or advanced usage).
     if (Howler.usingWebAudio) {
       Howler.masterGain =
-        typeof Howler.ctx.createGain === "undefined"
-          ? Howler.ctx.createGainNode()
-          : Howler.ctx.createGain();
+        typeof Howler.ctx.createGain === "undefined" ?
+        Howler.ctx.createGainNode() :
+        Howler.ctx.createGain();
       Howler.masterGain.gain.setValueAtTime(
         Howler._muted ? 0 : 1,
         Howler.ctx.currentTime
@@ -2701,7 +2758,8 @@
     window.Howler = Howler;
     window.Howl = Howl;
     window.Sound = Sound;
-  } else if (typeof global !== "undefined") {
+  }
+  else if (typeof global !== "undefined") {
     // Add to global in Node.js (for testing, etc).
     global.HowlerGlobal = HowlerGlobal;
     global.Howler = Howler;
@@ -2793,10 +2851,12 @@
           Howler.ctx.currentTime,
           0.1
         );
-      } else {
+      }
+      else {
         self.ctx.listener.setPosition(self._pos[0], self._pos[1], self._pos[2]);
       }
-    } else {
+    }
+    else {
       return self._pos;
     }
 
@@ -2855,10 +2915,12 @@
         self.ctx.listener.upX.setTargetAtTime(x, Howler.ctx.currentTime, 0.1);
         self.ctx.listener.upY.setTargetAtTime(y, Howler.ctx.currentTime, 0.1);
         self.ctx.listener.upZ.setTargetAtTime(z, Howler.ctx.currentTime, 0.1);
-      } else {
+      }
+      else {
         self.ctx.listener.setOrientation(x, y, z, xUp, yUp, zUp);
       }
-    } else {
+    }
+    else {
       return or;
     }
 
@@ -2882,21 +2944,14 @@
       self._stereo = o.stereo || null;
       self._pos = o.pos || null;
       self._pannerAttr = {
-        coneInnerAngle:
-          typeof o.coneInnerAngle !== "undefined" ? o.coneInnerAngle : 360,
-        coneOuterAngle:
-          typeof o.coneOuterAngle !== "undefined" ? o.coneOuterAngle : 360,
-        coneOuterGain:
-          typeof o.coneOuterGain !== "undefined" ? o.coneOuterGain : 0,
-        distanceModel:
-          typeof o.distanceModel !== "undefined" ? o.distanceModel : "inverse",
-        maxDistance:
-          typeof o.maxDistance !== "undefined" ? o.maxDistance : 10000,
-        panningModel:
-          typeof o.panningModel !== "undefined" ? o.panningModel : "HRTF",
+        coneInnerAngle: typeof o.coneInnerAngle !== "undefined" ? o.coneInnerAngle : 360,
+        coneOuterAngle: typeof o.coneOuterAngle !== "undefined" ? o.coneOuterAngle : 360,
+        coneOuterGain: typeof o.coneOuterGain !== "undefined" ? o.coneOuterGain : 0,
+        distanceModel: typeof o.distanceModel !== "undefined" ? o.distanceModel : "inverse",
+        maxDistance: typeof o.maxDistance !== "undefined" ? o.maxDistance : 10000,
+        panningModel: typeof o.panningModel !== "undefined" ? o.panningModel : "HRTF",
         refDistance: typeof o.refDistance !== "undefined" ? o.refDistance : 1,
-        rolloffFactor:
-          typeof o.rolloffFactor !== "undefined" ? o.rolloffFactor : 1
+        rolloffFactor: typeof o.rolloffFactor !== "undefined" ? o.rolloffFactor : 1
       };
 
       // Setup event listeners.
@@ -2937,9 +2992,9 @@
 
     // Check for PannerStereoNode support and fallback to PannerNode if it doesn't exist.
     var pannerType =
-      typeof Howler.ctx.createStereoPanner === "undefined"
-        ? "spatial"
-        : "stereo";
+      typeof Howler.ctx.createStereoPanner === "undefined" ?
+      "spatial" :
+      "stereo";
 
     // Setup the group's stereo panning if no ID is passed.
     if (typeof id === "undefined") {
@@ -2947,7 +3002,8 @@
       if (typeof pan === "number") {
         self._stereo = pan;
         self._pos = [pan, 0, 0];
-      } else {
+      }
+      else {
         return self._stereo;
       }
     }
@@ -2986,16 +3042,19 @@
                   0,
                   Howler.ctx.currentTime
                 );
-              } else {
+              }
+              else {
                 sound._panner.setPosition(pan, 0, 0);
               }
-            } else {
+            }
+            else {
               sound._panner.pan.setValueAtTime(pan, Howler.ctx.currentTime);
             }
           }
 
           self._emit("stereo", sound._id);
-        } else {
+        }
+        else {
           return sound._stereo;
         }
       }
@@ -3041,7 +3100,8 @@
       // Return the group's spatial position if no parameters are passed.
       if (typeof x === "number") {
         self._pos = [x, y, z];
-      } else {
+      }
+      else {
         return self._pos;
       }
     }
@@ -3066,13 +3126,15 @@
               sound._panner.positionX.setValueAtTime(x, Howler.ctx.currentTime);
               sound._panner.positionY.setValueAtTime(y, Howler.ctx.currentTime);
               sound._panner.positionZ.setValueAtTime(z, Howler.ctx.currentTime);
-            } else {
+            }
+            else {
               sound._panner.setOrientation(x, y, z);
             }
           }
 
           self._emit("pos", sound._id);
-        } else {
+        }
+        else {
           return sound._pos;
         }
       }
@@ -3120,7 +3182,8 @@
       // Return the group's spatial orientation if no parameters are passed.
       if (typeof x === "number") {
         self._orientation = [x, y, z];
-      } else {
+      }
+      else {
         return self._orientation;
       }
     }
@@ -3159,13 +3222,15 @@
                 z,
                 Howler.ctx.currentTime
               );
-            } else {
+            }
+            else {
               sound._panner.setOrientation(x, y, z);
             }
           }
 
           self._emit("orientation", sound._id);
-        } else {
+        }
+        else {
           return sound._orientation;
         }
       }
@@ -3218,7 +3283,8 @@
     if (args.length === 0) {
       // Return the group's panner attribute values.
       return self._pannerAttr;
-    } else if (args.length === 1) {
+    }
+    else if (args.length === 1) {
       if (typeof args[0] === "object") {
         o = args[0];
 
@@ -3238,46 +3304,40 @@
           }
 
           self._pannerAttr = {
-            coneInnerAngle:
-              typeof o.pannerAttr.coneInnerAngle !== "undefined"
-                ? o.pannerAttr.coneInnerAngle
-                : self._coneInnerAngle,
-            coneOuterAngle:
-              typeof o.pannerAttr.coneOuterAngle !== "undefined"
-                ? o.pannerAttr.coneOuterAngle
-                : self._coneOuterAngle,
-            coneOuterGain:
-              typeof o.pannerAttr.coneOuterGain !== "undefined"
-                ? o.pannerAttr.coneOuterGain
-                : self._coneOuterGain,
-            distanceModel:
-              typeof o.pannerAttr.distanceModel !== "undefined"
-                ? o.pannerAttr.distanceModel
-                : self._distanceModel,
-            maxDistance:
-              typeof o.pannerAttr.maxDistance !== "undefined"
-                ? o.pannerAttr.maxDistance
-                : self._maxDistance,
-            refDistance:
-              typeof o.pannerAttr.refDistance !== "undefined"
-                ? o.pannerAttr.refDistance
-                : self._refDistance,
-            rolloffFactor:
-              typeof o.pannerAttr.rolloffFactor !== "undefined"
-                ? o.pannerAttr.rolloffFactor
-                : self._rolloffFactor,
-            panningModel:
-              typeof o.pannerAttr.panningModel !== "undefined"
-                ? o.pannerAttr.panningModel
-                : self._panningModel
+            coneInnerAngle: typeof o.pannerAttr.coneInnerAngle !== "undefined" ?
+              o.pannerAttr.coneInnerAngle :
+              self._coneInnerAngle,
+            coneOuterAngle: typeof o.pannerAttr.coneOuterAngle !== "undefined" ?
+              o.pannerAttr.coneOuterAngle :
+              self._coneOuterAngle,
+            coneOuterGain: typeof o.pannerAttr.coneOuterGain !== "undefined" ?
+              o.pannerAttr.coneOuterGain :
+              self._coneOuterGain,
+            distanceModel: typeof o.pannerAttr.distanceModel !== "undefined" ?
+              o.pannerAttr.distanceModel :
+              self._distanceModel,
+            maxDistance: typeof o.pannerAttr.maxDistance !== "undefined" ?
+              o.pannerAttr.maxDistance :
+              self._maxDistance,
+            refDistance: typeof o.pannerAttr.refDistance !== "undefined" ?
+              o.pannerAttr.refDistance :
+              self._refDistance,
+            rolloffFactor: typeof o.pannerAttr.rolloffFactor !== "undefined" ?
+              o.pannerAttr.rolloffFactor :
+              self._rolloffFactor,
+            panningModel: typeof o.pannerAttr.panningModel !== "undefined" ?
+              o.pannerAttr.panningModel :
+              self._panningModel
           };
         }
-      } else {
+      }
+      else {
         // Return this sound's panner attribute values.
         sound = self._soundById(parseInt(args[0], 10));
         return sound ? sound._pannerAttr : self._pannerAttr;
       }
-    } else if (args.length === 2) {
+    }
+    else if (args.length === 2) {
       o = args[0];
       id = parseInt(args[1], 10);
     }
@@ -3291,38 +3351,30 @@
         // Merge the new values into the sound.
         var pa = sound._pannerAttr;
         pa = {
-          coneInnerAngle:
-            typeof o.coneInnerAngle !== "undefined"
-              ? o.coneInnerAngle
-              : pa.coneInnerAngle,
-          coneOuterAngle:
-            typeof o.coneOuterAngle !== "undefined"
-              ? o.coneOuterAngle
-              : pa.coneOuterAngle,
-          coneOuterGain:
-            typeof o.coneOuterGain !== "undefined"
-              ? o.coneOuterGain
-              : pa.coneOuterGain,
-          distanceModel:
-            typeof o.distanceModel !== "undefined"
-              ? o.distanceModel
-              : pa.distanceModel,
-          maxDistance:
-            typeof o.maxDistance !== "undefined"
-              ? o.maxDistance
-              : pa.maxDistance,
-          refDistance:
-            typeof o.refDistance !== "undefined"
-              ? o.refDistance
-              : pa.refDistance,
-          rolloffFactor:
-            typeof o.rolloffFactor !== "undefined"
-              ? o.rolloffFactor
-              : pa.rolloffFactor,
-          panningModel:
-            typeof o.panningModel !== "undefined"
-              ? o.panningModel
-              : pa.panningModel
+          coneInnerAngle: typeof o.coneInnerAngle !== "undefined" ?
+            o.coneInnerAngle :
+            pa.coneInnerAngle,
+          coneOuterAngle: typeof o.coneOuterAngle !== "undefined" ?
+            o.coneOuterAngle :
+            pa.coneOuterAngle,
+          coneOuterGain: typeof o.coneOuterGain !== "undefined" ?
+            o.coneOuterGain :
+            pa.coneOuterGain,
+          distanceModel: typeof o.distanceModel !== "undefined" ?
+            o.distanceModel :
+            pa.distanceModel,
+          maxDistance: typeof o.maxDistance !== "undefined" ?
+            o.maxDistance :
+            pa.maxDistance,
+          refDistance: typeof o.refDistance !== "undefined" ?
+            o.refDistance :
+            pa.refDistance,
+          rolloffFactor: typeof o.rolloffFactor !== "undefined" ?
+            o.rolloffFactor :
+            pa.rolloffFactor,
+          panningModel: typeof o.panningModel !== "undefined" ?
+            o.panningModel :
+            pa.panningModel
         };
 
         // Update the panner values or create a new panner if none exists.
@@ -3336,7 +3388,8 @@
           panner.refDistance = pa.refDistance;
           panner.rolloffFactor = pa.rolloffFactor;
           panner.panningModel = pa.panningModel;
-        } else {
+        }
+        else {
           // Make sure we have a position to setup the node with.
           if (!sound._pos) {
             sound._pos = self._pos || [0, 0, -0.5];
@@ -3376,7 +3429,8 @@
       // If a stereo or position was specified, set it up.
       if (self._stereo) {
         parent.stereo(self._stereo);
-      } else if (self._pos) {
+      }
+      else if (self._pos) {
         parent.pos(self._pos[0], self._pos[1], self._pos[2], self._id);
       }
     };
@@ -3401,9 +3455,11 @@
       // If a stereo or position was specified, set it up.
       if (self._stereo) {
         parent.stereo(self._stereo);
-      } else if (self._pos) {
+      }
+      else if (self._pos) {
         parent.pos(self._pos[0], self._pos[1], self._pos[2], self._id);
-      } else if (self._panner) {
+      }
+      else if (self._panner) {
         // Disconnect the panner.
         self._panner.disconnect(0);
         self._panner = undefined;
@@ -3451,7 +3507,8 @@
           sound._pos[2],
           Howler.ctx.currentTime
         );
-      } else {
+      }
+      else {
         sound._panner.setPosition(sound._pos[0], sound._pos[1], sound._pos[2]);
       }
 
@@ -3468,14 +3525,16 @@
           sound._orientation[2],
           Howler.ctx.currentTime
         );
-      } else {
+      }
+      else {
         sound._panner.setOrientation(
           sound._orientation[0],
           sound._orientation[1],
           sound._orientation[2]
         );
       }
-    } else {
+    }
+    else {
       sound._panner = Howler.ctx.createStereoPanner();
       sound._panner.pan.setValueAtTime(sound._stereo, Howler.ctx.currentTime);
     }

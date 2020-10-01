@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Observer from './observer';
 
 /**
@@ -74,7 +75,8 @@ export default function ajax(options) {
         instance.fireEvent('load', e);
         if (200 == xhr.status || 206 == xhr.status) {
             instance.fireEvent('success', xhr.response, e);
-        } else {
+        }
+        else {
             instance.fireEvent('error', e);
         }
     });

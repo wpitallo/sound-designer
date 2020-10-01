@@ -3,7 +3,8 @@ import "./easeGraph.css";
 
 import anime from "animejs/lib/anime.es.js";
 
-import { linear, easeInQuad, easeInCubic } from "./data.js";
+import { linear } from "./data.js";
+//import { linear, easeInQuad, easeInCubic } from "./data.js";
 
 export default class EaseGraph extends React.Component {
   constructor(props) {

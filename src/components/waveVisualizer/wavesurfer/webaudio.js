@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import * as util from './util';
 
 // using constants to prevent someone writing the string wrong
@@ -73,7 +75,7 @@ export default class WebAudio extends util.Observer {
      */
     getAudioContext() {
         if (!window.WaveSurferAudioContext) {
-            window.WaveSurferAudioContext = new (window.AudioContext ||
+            window.WaveSurferAudioContext = new(window.AudioContext ||
                 window.webkitAudioContext)();
         }
         return window.WaveSurferAudioContext;
@@ -88,7 +90,7 @@ export default class WebAudio extends util.Observer {
      */
     getOfflineAudioContext(sampleRate) {
         if (!window.WaveSurferOfflineAudioContext) {
-            window.WaveSurferOfflineAudioContext = new (window.OfflineAudioContext ||
+            window.WaveSurferOfflineAudioContext = new(window.OfflineAudioContext ||
                 window.webkitOfflineAudioContext)(1, 2, sampleRate);
         }
         return window.WaveSurferOfflineAudioContext;
@@ -229,12 +231,14 @@ export default class WebAudio extends util.Observer {
     createScriptNode() {
         if (this.params.audioScriptProcessor) {
             this.scriptNode = this.params.audioScriptProcessor;
-        } else {
+        }
+        else {
             if (this.ac.createScriptProcessor) {
                 this.scriptNode = this.ac.createScriptProcessor(
                     WebAudio.scriptBufferSize
                 );
-            } else {
+            }
+            else {
                 this.scriptNode = this.ac.createJavaScriptNode(
                     WebAudio.scriptBufferSize
                 );
@@ -251,9 +255,11 @@ export default class WebAudio extends util.Observer {
             if (time >= this.getDuration()) {
                 this.setState(FINISHED);
                 this.fireEvent('pause');
-            } else if (time >= this.scheduledPause) {
+            }
+            else if (time >= this.scheduledPause) {
                 this.pause();
-            } else if (this.state === this.states[PLAYING]) {
+            }
+            else if (this.state === this.states[PLAYING]) {
                 this.fireEvent('audioprocess', time);
             }
         };
@@ -277,7 +283,8 @@ export default class WebAudio extends util.Observer {
         // Create gain node using the AudioContext
         if (this.ac.createGain) {
             this.gainNode = this.ac.createGain();
-        } else {
+        }
+        else {
             this.gainNode = this.ac.createGainNode();
         }
         // Add the gain node to the graph
@@ -311,7 +318,8 @@ export default class WebAudio extends util.Observer {
             audio.srcObject = dest.stream;
 
             return audio.setSinkId(deviceId);
-        } else {
+        }
+        else {
             return Promise.reject(new Error('Invalid deviceId: ' + deviceId));
         }
     }
@@ -417,9 +425,9 @@ export default class WebAudio extends util.Observer {
         this.setLength(length);
 
         if (!this.buffer) {
-            return this.params.splitChannels
-                ? this.splitPeaks
-                : this.mergedPeaks;
+            return this.params.splitChannels ?
+                this.splitPeaks :
+                this.mergedPeaks;
         }
 
         /**
@@ -526,7 +534,8 @@ export default class WebAudio extends util.Observer {
             // global singleton
             if (!this.params.audioContext) {
                 window.WaveSurferAudioContext = null;
-            } else {
+            }
+            else {
                 this.params.audioContext = null;
             }
             // clear the offlineAudioContext
@@ -709,7 +718,8 @@ export default class WebAudio extends util.Observer {
         value = value || 1;
         if (this.isPaused()) {
             this.playbackRate = value;
-        } else {
+        }
+        else {
             this.pause();
             this.playbackRate = value;
             this.play();

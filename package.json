@@ -1,5 +1,5 @@
 {
-  "name": "sdfsdfsdfsdf",
+  "name": "sound-designer",
   "description": "The Accordion widget contains several panels displayed one under another. These panels can be collapsed or expanded by a user, which makes this widget very useful for presenting information in a limited amount of space.\n",
   "dependencies": {
     "animejs": "3.1.0",
@@ -24,12 +24,27 @@
   },
   "version": "0.0.289",
   "devDependencies": {
-    "react-scripts": "3.3.1"
+    "cross-env": "^7.0.2",
+    "eslint-config-react-app": "^5.2.1",
+    "react-scripts": "3.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cross-env PORT=8081 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint:fix": "eslint src/**/*.js --fix"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

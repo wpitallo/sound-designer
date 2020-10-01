@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Drawer from './drawer';
 import * as util from './util';
 import CanvasEntry from './drawer.canvasentry';
@@ -293,12 +294,12 @@ export default class MultiCanvas extends Drawer {
                 const length = peaks.length / peakIndexScale;
                 const bar = this.params.barWidth * this.params.pixelRatio;
                 const gap =
-                    this.params.barGap === null
-                        ? Math.max(this.params.pixelRatio, ~~(bar / 2))
-                        : Math.max(
-                              this.params.pixelRatio,
-                              this.params.barGap * this.params.pixelRatio
-                          );
+                    this.params.barGap === null ?
+                    Math.max(this.params.pixelRatio, ~~(bar / 2)) :
+                    Math.max(
+                        this.params.pixelRatio,
+                        this.params.barGap * this.params.pixelRatio
+                    );
                 const step = bar + gap;
 
                 const scale = length / this.width;
@@ -465,8 +466,8 @@ export default class MultiCanvas extends Drawer {
                 if (this.params.splitChannels) {
                     this.setHeight(
                         channels.length *
-                            this.params.height *
-                            this.params.pixelRatio
+                        this.params.height *
+                        this.params.pixelRatio
                     );
                     return channels.forEach((channelPeaks, i) =>
                         this.prepareDraw(channelPeaks, i, start, end, fn)
@@ -533,7 +534,8 @@ export default class MultiCanvas extends Drawer {
                     return entry.getImage(format, quality, type);
                 })
             );
-        } else if (type === 'dataURL') {
+        }
+        else if (type === 'dataURL') {
             let images = this.canvases.map(entry =>
                 entry.getImage(format, quality, type)
             );

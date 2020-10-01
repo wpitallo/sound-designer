@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import * as util from './util';
 
 /**
@@ -87,9 +89,9 @@ export default class Drawer extends util.Observer {
     handleEvent(e, noPrevent) {
         !noPrevent && e.preventDefault();
 
-        const clientX = e.targetTouches
-            ? e.targetTouches[0].clientX
-            : e.clientX;
+        const clientX = e.targetTouches ?
+            e.targetTouches[0].clientX :
+            e.clientX;
         const bbox = this.wrapper.getBoundingClientRect();
 
         const nominalWidth = this.width;
@@ -99,18 +101,19 @@ export default class Drawer extends util.Observer {
         if (!this.params.fillParent && nominalWidth < parentWidth) {
             progress =
                 (this.params.rtl ? bbox.right - clientX : clientX - bbox.left) *
-                    (this.params.pixelRatio / nominalWidth) || 0;
+                (this.params.pixelRatio / nominalWidth) || 0;
 
             if (progress > 1) {
                 progress = 1;
             }
-        } else {
+        }
+        else {
             progress =
-                ((this.params.rtl
-                    ? bbox.right - clientX
-                    : clientX - bbox.left) +
+                ((this.params.rtl ?
+                        bbox.right - clientX :
+                        clientX - bbox.left) +
                     this.wrapper.scrollLeft) /
-                    this.wrapper.scrollWidth || 0;
+                this.wrapper.scrollWidth || 0;
         }
 
         return progress;
@@ -164,9 +167,9 @@ export default class Drawer extends util.Observer {
             this.clearWave();
         }
 
-        this.params.barWidth
-            ? this.drawBars(peaks, 0, start, end)
-            : this.drawWave(peaks, 0, start, end);
+        this.params.barWidth ?
+            this.drawBars(peaks, 0, start, end) :
+            this.drawWave(peaks, 0, start, end);
     }
 
     /**
@@ -281,7 +284,8 @@ export default class Drawer extends util.Observer {
             this.style(this.wrapper, {
                 width: ''
             });
-        } else {
+        }
+        else {
             this.style(this.wrapper, {
                 width: ~~(this.width / this.params.pixelRatio) + 'px'
             });

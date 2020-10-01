@@ -1,5 +1,6 @@
 import React from "react";
-import { FileUploader, SelectBox, CheckBox } from "devextreme-react";
+//import { FileUploader, SelectBox, CheckBox } from "devextreme-react";
+import { FileUploader } from "devextreme-react";
 
 export default class Upload extends React.Component {
   constructor(props) {

@@ -5,14 +5,19 @@ import EffectEditor from "./content/EffectEditor.js";
 import ThreeVisualizer from "./components/threeVisualizer/ThreeVisualizer.js";
 import "./app.css";
 import PresetPlayer from "./content/PresetPlayer.js";
-import BackgroundVisualizer from "./components/backgroundVisualizer/backgroundVisualizer.js";
+//import BackgroundVisualizer from "./components/backgroundVisualizer/backgroundVisualizer.js";
 
 import HowlController from "./components/howlController/HowlController.js";
 
 import "./background.js";
 
-let serverBaseUrl = "https://w97sc.sse.codesandbox.io/";
-let soundsBaseUrl = "https://w97sc.sse.codesandbox.io/sound-files";
+// let serverBaseUrl = "https://w97sc.sse.codesandbox.io/";
+// let soundsBaseUrl = "https://w97sc.sse.codesandbox.io/sound-files";
+
+
+let serverBaseUrl = "http://18.188.176.181:8080/";
+let soundsBaseUrl = "http://18.188.176.181:8080/sound-files";
+
 
 class App extends React.Component {
   constructor(props) {
@@ -88,7 +93,7 @@ class App extends React.Component {
       this.setState({ presetsData: undefined });
       this.setState({ soundsData: undefined });
 
-      let projectData = await (async () => await (await fetch(`${serverBaseUrl}projects/${this.state.selectedProject.id}`)).json())();
+      let projectData = await (async() => await (await fetch(`${serverBaseUrl}projects/${this.state.selectedProject.id}`)).json())();
       this.setState({
         spritesData: projectData.sprites
       });
@@ -175,7 +180,8 @@ class App extends React.Component {
   unloadPresetPlayer(callback) {
     if (this.presetPlayer) {
       this.presetPlayer.unload(() => callback());
-    } else {
+    }
+    else {
       callback();
     }
   }
@@ -200,9 +206,16 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    //let dataHelper = await import("./data/projects.js");
-    let data = await (async () => await (await fetch(`${serverBaseUrl}projects`)).json())();
-    this.setState({ projectsData: data });
+    debugger
+    try {
+      //let dataHelper = await import("./data/projects.js");
+      let data = await (async() => await (await fetch(`${serverBaseUrl}projects`)).json())();
+      this.setState({ projectsData: data });
+    }
+    catch (e) {
+      console.error(e)
+    }
+
   }
 
   render() {

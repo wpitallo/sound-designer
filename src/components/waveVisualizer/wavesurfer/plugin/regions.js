@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * (Single) Region plugin class
  *
@@ -16,11 +17,10 @@ class Region {
     this.id = params.id == null ? ws.util.getId() : params.id;
     this.start = Number(params.start) || 0;
     this.end =
-      params.end == null
-        ? // small marker-like region
-          this.start +
-          (4 / this.wrapper.scrollWidth) * this.wavesurfer.getDuration()
-        : Number(params.end);
+      params.end == null ? // small marker-like region
+      this.start +
+      (4 / this.wrapper.scrollWidth) * this.wavesurfer.getDuration() :
+      Number(params.end);
     this.resize = params.resize === undefined ? true : Boolean(params.resize);
     this.drag = params.drag === undefined ? true : Boolean(params.drag);
     // reflect resize and drag state of region for region-updated listener
@@ -46,9 +46,9 @@ class Region {
     this.scrollThreshold = params.scrollThreshold || 10;
     // Determines whether the context menu is prevented from being opened.
     this.preventContextMenu =
-      params.preventContextMenu === undefined
-        ? false
-        : Boolean(params.preventContextMenu);
+      params.preventContextMenu === undefined ?
+      false :
+      Boolean(params.preventContextMenu);
 
     // select channel ID to set region
     let channelIdx =
@@ -186,13 +186,13 @@ class Region {
 
       // Merge CSS properties per handle.
       const handleLeftCss =
-        this.handleStyle.left !== "none"
-          ? Object.assign({ left: "0px" }, css, this.handleStyle.left)
-          : null;
+        this.handleStyle.left !== "none" ?
+        Object.assign({ left: "0px" }, css, this.handleStyle.left) :
+        null;
       const handleRightCss =
-        this.handleStyle.right !== "none"
-          ? Object.assign({ right: "0px" }, css, this.handleStyle.right)
-          : null;
+        this.handleStyle.right !== "none" ?
+        Object.assign({ right: "0px" }, css, this.handleStyle.right) :
+        null;
 
       if (handleLeftCss) {
         this.style(handleLeft, handleLeftCss);
@@ -210,12 +210,10 @@ class Region {
 
   formatTime(start, end) {
     return (start == end ? [start] : [start, end])
-      .map(time =>
-        [
-          Math.floor((time % 3600) / 60), // minutes
-          ("00" + Math.floor(time % 60)).slice(-2) // seconds
-        ].join(":")
-      )
+      .map(time => [
+        Math.floor((time % 3600) / 60), // minutes
+        ("00" + Math.floor(time % 60)).slice(-2) // seconds
+      ].join(":"))
       .join("-");
   }
 
@@ -420,10 +418,11 @@ class Region {
       this.isDragging = false;
       if (e.target.tagName.toLowerCase() === "handle") {
         this.isResizing = true;
-        resize = e.target.classList.contains("wavesurfer-handle-start")
-          ? "start"
-          : "end";
-      } else {
+        resize = e.target.classList.contains("wavesurfer-handle-start") ?
+          "start" :
+          "end";
+      }
+      else {
         this.isDragging = true;
         drag = true;
         resize = false;
@@ -492,7 +491,8 @@ class Region {
           // Check direction
           if (time < oldTime && x >= 0) {
             scrollDirection = -1;
-          } else if (
+          }
+          else if (
             time > oldTime &&
             x + regionRect.width <= wrapperRect.right
           ) {
@@ -507,16 +507,19 @@ class Region {
           ) {
             scrollDirection = null;
           }
-        } else {
+        }
+        else {
           // Mouse based threshold
           let x = e.clientX - wrapperRect.left;
 
           // Check direction
           if (x <= scrollThreshold) {
             scrollDirection = -1;
-          } else if (x >= wrapperRect.right - scrollThreshold) {
+          }
+          else if (x >= wrapperRect.right - scrollThreshold) {
             scrollDirection = 1;
-          } else {
+          }
+          else {
             scrollDirection = null;
           }
         }
@@ -567,7 +570,8 @@ class Region {
         start: Math.min(this.start + delta, this.end),
         end: Math.max(this.start + delta, this.end)
       });
-    } else {
+    }
+    else {
       this.update({
         start: Math.min(this.end + delta, this.start),
         end: Math.max(this.end + delta, this.start)
@@ -728,7 +732,8 @@ export default class RegionsPlugin {
     if (this.wavesurfer.isReady) {
       this._onBackendCreated();
       this._onReady();
-    } else {
+    }
+    else {
       this.wavesurfer.once("ready", this._onReady);
       this.wavesurfer.once("backend-created", this._onBackendCreated);
     }
@@ -917,9 +922,11 @@ export default class RegionsPlugin {
         const x = e.clientX - wrapperRect.left;
         if (x <= scrollThreshold) {
           scrollDirection = -1;
-        } else if (x >= wrapperRect.right - scrollThreshold) {
+        }
+        else if (x >= wrapperRect.right - scrollThreshold) {
           scrollDirection = 1;
-        } else {
+        }
+        else {
           scrollDirection = null;
         }
         scrollDirection && edgeScroll(e);
@@ -977,7 +984,7 @@ export default class RegionsPlugin {
       const offset = params.snapToGridOffset || 0;
       return (
         Math.round((value - offset) / params.snapToGridInterval) *
-          params.snapToGridInterval +
+        params.snapToGridInterval +
         offset
       );
     }

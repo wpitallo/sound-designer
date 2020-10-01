@@ -1,5 +1,5 @@
 import React from "react";
-import { Accordion, Button, TextBox } from "devextreme-react";
+// mport { Accordion, Button, TextBox } from "devextreme-react";
 
 import AddControl from "./AddControl.js";
 import ShowMenuButton from "./ShowMenuButton.js";
@@ -90,7 +90,8 @@ export default class Menu extends React.Component {
           <HideMenuButton handler={this.hideMenuHandler} />{" "}
         </div>
       );
-    } else {
+    }
+    else {
       menuButton = (
         <div>
           <div

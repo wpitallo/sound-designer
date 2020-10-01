@@ -2,10 +2,10 @@ import React from "react";
 import { Popup } from "devextreme-react";
 
 export default class DialogPopup extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
+  // constructor(props) {
+  //   super(props);
+  // }
+  
   render() {
     return (
       <div>

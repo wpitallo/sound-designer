@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * @typedef {Object} ListenerDescriptor
  * @property {string} name The name of the event
@@ -67,7 +68,8 @@ export default class Observer {
                         handlers.splice(i, 1);
                     }
                 }
-            } else {
+            }
+            else {
                 handlers.length = 0;
             }
         }
