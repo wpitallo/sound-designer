@@ -3,7 +3,7 @@
   "description": "The Accordion widget contains several panels displayed one under another. These panels can be collapsed or expanded by a user, which makes this widget very useful for presenting information in a limited amount of space.\n",
   "dependencies": {
     "animejs": "3.1.0",
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "debounce": "1.2.0",
     "devexpress-diagram": "latest",
     "devexpress-gantt": "latest",
